@@ -33,7 +33,9 @@ dependencies:
   http:
   html:
   gbk2utf8: ^1.0.1
-  xpath: ^0.1.0
+  xpath_parse: 1.0.2
+  get: 3.26.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -42,6 +44,8 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
+
+
 flutter:
 
   # The following line ensures that the Material Icons font is

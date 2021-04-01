@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
           itemBuilder: (_,index){
         return GestureDetector(
           onTap: (){
-            SearchEngine().openUrlToGetContent(search360[index].path);
+            SearchEngine().openUrlToGetContent(search360[index]);
           },
           child: Column(
             children: [

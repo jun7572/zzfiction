@@ -11,7 +11,12 @@ import 'package:gbk2utf8/gbk2utf8.dart';
 import 'package:html/dom.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
+import 'package:xpath_parse/xpath_selector.dart';
+import 'package:path/path.dart' as path ;
+
+
 import 'package:zzfiction/bean/FictionSource.dart';
+import 'package:zzfiction/main.dart';
 
 // <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
@@ -27,6 +32,7 @@ class SearchEngine{
   //网址,章节list 前几章的内容
   //返回当前结果list 自己定义一个类 看要什么数据
   Future<List<FictionSource>>  search360(String content)async{
+
     var url = path360+content+" 小说";
     var response = await http.get(url,headers: headers);
     Document document = parse(response.body);
@@ -65,38 +71,78 @@ class SearchEngine{
   }
   //有些信息可以去获取<head>标签
   //打开某个Url,返回内容
-  //不通过啥class  通过dl ul ol 去获取 文章列表
-  openUrlToGetContent(String url)async{
+  //  通过a去获取 文章列表
+  Future<FictionSource> openUrlToGetContent(FictionSource fs)async{
+    String url=fs.path;
+    //处理一下
+    getHostAndSetRestful(fs);
     var response = await http.get(url,headers: headers);
-    response.headers
-    //意思要获取编码  header
-    Document document = parse(utf8.decode(response.body.codeUnits));
-    // Document document = parse(gbk.decode(response.bodyBytes));
+    String charSet = getCharset(response);
 
-    // Document document = parse(response.body);
-    List<Element>  elementsByTagName = document.getElementsByTagName("li");
-    List<Element>  elementsByTagName2 = document.getElementsByTagName("dd");
-    List<Element>  elementsByTagName3 = document.getElementsByTagName("dt");
-
-
-    //互斥的?一般只有一个
-    if(elementsByTagName!=null){
-      for(Element ss in elementsByTagName){
-        print(ss.innerHtml.toString());
-      }
+    Document document;
+    if(charSet=="gbk"){
+      document = parse(gbk.decode(response.body.codeUnits));
     }
-    if(elementsByTagName2!=null){
-      for(Element ss in elementsByTagName2){
-        print(ss.outerHtml);
-      }
+    else if(charSet=="utf-8"){
+       document = parse(utf8.decode(response.body.codeUnits));
+    }else{
+      document = parse(response.body);
     }
-    if(elementsByTagName3!=null){
-      for(Element ss in elementsByTagName3){
-        print(ss.innerHtml.toString());
-      }
+    // List<Element>  query = XPath.source(response.body).query("//a").elements();
+    List<Element>  query = document.body.getElementsByTagName("a");
+
+    List<FictionChapter> lists=[];
+    query.forEach((element) {
+     if( element.text.contains("章")){
+       lists.add(FictionChapter(title:element.text.toString(),path:element.attributes["href"]));
+     }
+    });
+    fs.chapters=lists;
+    return fs;
+   
+
+  }
+  //<meta http-equiv="Content-Type" content="text/html; charset=gbk">
+  //获取当前网页的字符集//不能通过header去获取,不准,最好是去拿head标签的contenttype
+ String getCharset(var response){
+   var response2 = response as http.Response;
+   // String attribute11=  XPath.source(response2.body).query("//head").get();
+   // print("attribute11=="+attribute11);
+    String attribute = XPath.source(response2.body).query("//meta[@http-equiv='Content-Type']").get();
+    //集合多个网页的经验
+   if(attribute.contains("utf-8")||attribute.contains("UTF-8")){
+     return "utf-8";
+   }else if(attribute.contains("gbk")||attribute.contains("GBK")){
+     return "gbk";
+   }
+
+  return "";
+  }
+  //其实地址就分restful和非restful风格的
+  //就按这两种来分吧
+  //获取域名
+   getHostAndSetRestful(FictionSource fs){
+
+    String url=fs.path;
+    if(url.contains("http")){
+
+      Uri u = Uri.parse(url);
+      fs.host=u.host;
+      bool orNot = _setFictionRestfulOrNot(fs.path);
+      fs.restful=orNot;
+    }else{
+      throw Exception("无http字符");
     }
 
   }
 
+  //设置是不是restful风格的
+  bool _setFictionRestfulOrNot(String url){
+    if(url.contains("html")){
+      return false;
+    }else{
+      return true;
+    }
+  }
 
 }

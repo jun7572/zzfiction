@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:zzfiction/SearchEngine.dart';
+import 'package:zzfiction/Test2.dart';
 
 import 'bean/FictionSource.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => FictionSource()),
+
+  ],child: MyApp(),));
+
 }
 
 class MyApp extends StatelessWidget {
@@ -36,7 +42,8 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   List<FictionSource> search360=[];
   void _incrementCounter() async{
-     search360 =await SearchEngine().search360("万族之劫");
+     // search360 =await SearchEngine().search360("万族之劫");
+     search360 =await SearchEngine().search360("烂柯棋缘");
      setState(() {
 
      });
@@ -54,8 +61,17 @@ class _MyHomePageState extends State<MyHomePage> {
           itemCount: search360.length,
           itemBuilder: (_,index){
         return GestureDetector(
-          onTap: (){
-            SearchEngine().openUrlToGetContent(search360[index]);
+          onTap: ()async{
+            print("asdfa");
+            FictionSource openUrlToGetContent =await SearchEngine().openUrlToGetSource(search360[index]);
+
+            context.read<FictionSource>().updateSource(openUrlToGetContent);
+
+
+            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
+              return Test2();
+            }));
+
           },
           child: Column(
             children: [

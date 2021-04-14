@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:zzfiction/SearchEngine.dart';
 
 import 'Test3.dart';
-import 'bean/FictionSource.dart';
+import '../bean/FictionSource.dart';
 
 class Test2 extends StatefulWidget{
   @override

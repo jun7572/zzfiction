@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'bean/FictionSource.dart';
+import '../bean/FictionSource.dart';
 import 'package:provider/provider.dart';
 class Test3 extends StatefulWidget{
   @override

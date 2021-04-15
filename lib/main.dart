@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:zzfiction/SearchEngine.dart';
 import 'package:zzfiction/test/Test2.dart';
 import 'package:zzfiction/binding/HomeBinding.dart';
+import 'package:zzfiction/theme/ThemeUtil.dart';
 
 import 'approute/AppRoutes.dart';
 import 'bean/FictionSource.dart';
@@ -35,10 +36,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      theme:ThemeUtil.getlitghTheme(),
       // home: MyHomePage(title: 'Flutter Demo Home Page'),
       initialRoute: AppRoutes.INITIAL,
       getPages: AppRoutes.routes,
@@ -47,9 +45,12 @@ class MyApp extends StatelessWidget {
         initScreen(width: 1080, height: 1920);
         return child;
       },
+
     );
   }
 }
+
+
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);

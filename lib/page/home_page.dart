@@ -15,7 +15,7 @@ class HomePage extends GetView<FictionSourceController>{
     return Scaffold(
       body:Column(
         children: [
-          Container(color: Colors.lightBlue,width: Get.width,height: getHp(700),padding: EdgeInsets.all(getWp(30)),
+          Container(color: Theme.of(context).primaryColor,width: Get.width,height: getHp(700),padding: EdgeInsets.all(getWp(30)),
             child: Column(
               children: [
                 SizedBox(height: getHp(250),),

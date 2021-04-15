@@ -15,7 +15,15 @@ class SearchDatapage extends StatelessWidget{
       body: ListView.builder(
           itemCount: fs.fss.length,
           itemBuilder:  (_,index){
-            return TextButton(child: Padding(padding: EdgeInsets.all(5),child: Text( fs.fss[index].title),),onPressed: ()async{
+            return TextButton(
+
+              child: Card(
+               child: Padding(padding: EdgeInsets.all(10),child: Row(
+                children: [
+                  Text( fs.fss[index].title),
+                ],
+              ),),
+            ),onPressed: ()async{
               // String absPath;
               //这里应该是获取链接,判断链接的前后 然后再看是否拼接
 

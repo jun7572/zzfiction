@@ -34,29 +34,35 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Flutter Demo',
-      theme:ThemeUtil.getlitghTheme(),
-      // home: MyHomePage(title: 'Flutter Demo Home Page'),
-      initialRoute: AppRoutes.INITIAL,
-      getPages: AppRoutes.routes,
+    // return GetMaterialApp(
+    //   title: 'Flutter Demo',
+    //   theme:ThemeUtil.getlitghTheme(),
+    //   // home: MyHomePage(title: 'Flutter Demo Home Page'),
+    //   initialRoute: AppRoutes.INITIAL,
+    //   getPages: AppRoutes.routes,
+    //
+    //   builder: (BuildContext context, Widget child) {
+    //     initScreen(width: 1080, height: 1920);
+    //     return child;
+    //   },
+    //
+    // );
+    return MaterialApp(
+          title: 'Flutter Demo',
+          theme:ThemeUtil.getlitghTheme(),
+        home: MyHomePage());
 
-      builder: (BuildContext context, Widget child) {
-        initScreen(width: 1080, height: 1920);
-        return child;
-      },
 
-    );
   }
 }
 
 
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key key}) : super(key: key);
 
 
-  final String title;
+   String title;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -79,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text("asfasdf"),
       ),
       body: ListView.builder(
           itemCount: search360.length,
@@ -87,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return GestureDetector(
           onTap: ()async{
             print("asdfa");
-            FictionSource openUrlToGetContent =await SearchEngine().openUrlToGetSource(search360[index]);
+            FictionSource openUrlToGetContent =await SearchEngine().openSourceToGetDirs(search360[index]);
 
             context.read<FictionSource>().updateSource(openUrlToGetContent);
 

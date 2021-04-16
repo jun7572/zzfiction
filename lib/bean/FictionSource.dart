@@ -9,7 +9,7 @@ class FictionSource with ChangeNotifier,DiagnosticableTreeMixin{
   //当前网址的域名
   String host;
   String scheme;
-
+  //当前阅读到第几章
   int index;
   List<FictionChapter> chapters=[];
   //是不是restful风格的地址,可以根据是不是拼接地址

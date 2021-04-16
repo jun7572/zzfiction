@@ -22,7 +22,6 @@ class SearchController extends GetxController{
     find.fss=await SearchEngine().search360(_search);
     NativeProgressHud.hideWaiting();
     Get.toNamed(PageName.SearchDatapage);
-
  }
 @override
   void onReady() {

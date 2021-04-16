@@ -6,6 +6,7 @@ import 'dart:convert';
 
 import 'dart:io';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:gbk2utf8/gbk2utf8.dart';
@@ -87,7 +88,7 @@ class SearchEngine{
   //有些信息可以去获取<head>标签
   //打开某个Url,返回内容
   //  通过a去获取 文章列表
-  Future<FictionSource> openUrlToGetSource(FictionSource fs)async{
+  Future<FictionSource> openSourceToGetDirs(FictionSource fs)async{
     String url=fs.path;
     //处理一下
     getHostAndSetRestful(fs);
@@ -117,11 +118,16 @@ class SearchEngine{
        String  path = element.attributes["href"];
        String absPath="";
        //是不是全的网址
-       if((path.startsWith("http")||path.startsWith("https"))&&path.endsWith("html")){
+       // (path.startsWith("http")||path.startsWith("https"))&&path.endsWith("html")))
+       if(path.contains("www")
+           ||((path.startsWith("http")||path.startsWith("https"))&&path.endsWith("html"))
+       ){
+         //处理一下这个全路径
+         path.substring(start)
          absPath=path;
        }else{
          absPath=fs.scheme+"://"+fs.host+path;
-
+       
        }
        lists.add(FictionChapter(title:element.text.toString(),path:path,absPath: absPath));
      }
@@ -178,7 +184,16 @@ class SearchEngine{
       return true;
     }
   }
-
+  // static String decompress(String zipText) {
+  //   final List<int> compressed = base64Decode(zipText);
+  //   if (compressed.length > 4) {
+  //     Uint8List uint8list = GZipDecoder().decodeBytes(compressed.sublist(4, compressed.length - 4));
+  //     // print( String.fromCharCodes(uint8list));
+  //     return String.fromCharCodes(uint8list);
+  //   } else {
+  //     return "";
+  //   }
+  // }
   //获取单章的内容
  Future<String>  getSingleChapterContent(FictionSource fs ,int index)async{
 
@@ -188,12 +203,15 @@ class SearchEngine{
     String charSet = fs.charset;
   Document document;
   if(charSet=="gbk"){
-    document = parse(gbk.decode(response.body.codeUnits));
+    document = parse(gbk.decode(response.bodyBytes));
   }
   else if(charSet=="utf-8"){
-    document = parse(utf8.decode(response.body.codeUnits));
+    // Utf8Codec().decode(response.bodyBytes)
+    document = parse(utf8.decode(response.bodyBytes));
+
   }else{
     document = parse(response.body);
+
   }
 
 

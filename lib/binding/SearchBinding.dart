@@ -7,7 +7,7 @@ class SearchBinding extends Bindings{
   void dependencies() {
 
    Get.lazyPut(() => SearchController());
-    Get.lazyPut(() => FictionRepository());
+
   }
 
 }

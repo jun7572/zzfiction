@@ -6,9 +6,8 @@ import 'package:zzfiction/repository/FictionRepository.dart';
 class ReadController extends SuperController{
  @override
   void onReady() {
-    NativeProgressHud.showWaiting();
-    FictionRepository fr= Get.find<FictionRepository>();
-    append(() => fr.updateFictionSourceList);
+
+
   }
   @override
   void onDetached() {

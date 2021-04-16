@@ -8,7 +8,7 @@ class ReadBinding extends Bindings{
   void dependencies() {
 
    Get.lazyPut(() => ReadController());
-   Get.lazyPut(() => FictionRepository());
+
   }
 
 }

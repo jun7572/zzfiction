@@ -2,8 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:native_progress_hud/native_progress_hud.dart';
+import 'package:zzfiction/approute/PageName.dart';
 import 'package:zzfiction/repository/FictionRepository.dart';
 
+import '../SearchEngine.dart';
+  //搜索回来的所有数据源
 class SearchDatapage extends StatelessWidget{
   FictionRepository fs= Get.find<FictionRepository>();
   @override
@@ -24,19 +28,7 @@ class SearchDatapage extends StatelessWidget{
                 ],
               ),),
             ),onPressed: ()async{
-              // String absPath;
-              //这里应该是获取链接,判断链接的前后 然后再看是否拼接
-
-              // FictionSource fs=context.read<FictionSource>();
-              // String s= await SearchEngine().getSingleChapterContent(fs,index);
-              // context.read<FictionSource>().chapters[index].content=s;
-              // context.read<FictionSource>().readdingChapter=index;
-              //
-              // Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
-              //   return Test3();
-              // }));
-              //
-              //
+              fs.getFictionDirs(index);
             },);
           }),
     );

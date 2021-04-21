@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:zzfiction/approute/PageName.dart';
 import 'package:zzfiction/controller/FictionSourceController.dart';
 import 'package:zzfiction/managers/screen_manager.dart';
+import 'package:zzfiction/widget/ReadWidget.dart';
 
 
 
@@ -22,6 +23,9 @@ class HomePage extends GetView<FictionSourceController>{
 
                 GestureDetector(
                   onTap: controller.toSearchPgae,
+                  // onTap:(){
+                  //   Navigator.push(context, MaterialPageRoute(builder: (_)=>ReadWidget()));
+                  // },
                   child: Container(
                     width:  Get.width,
                     height: getHp(150),

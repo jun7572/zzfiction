@@ -21,6 +21,7 @@ class FictionRepository {
       print(s);
       currentFictionSource.chapters[index].content=s;
       currentFictionSource.readdingChapter=index;
+      currentFictionChapter=currentFictionSource.chapters[index];
       Get.toNamed(PageName.ReadPage);
     }
     getFictionDirs(int index)async{

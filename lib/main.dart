@@ -34,23 +34,25 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // return GetMaterialApp(
-    //   title: 'Flutter Demo',
-    //   theme:ThemeUtil.getlitghTheme(),
-    //   // home: MyHomePage(title: 'Flutter Demo Home Page'),
-    //   initialRoute: AppRoutes.INITIAL,
-    //   getPages: AppRoutes.routes,
-    //
-    //   builder: (BuildContext context, Widget child) {
-    //     initScreen(width: 1080, height: 1920);
-    //     return child;
-    //   },
-    //
-    // );
-    return MaterialApp(
-          title: 'Flutter Demo',
-          theme:ThemeUtil.getlitghTheme(),
-        home: MyHomePage());
+    return GetMaterialApp(
+      title: 'Flutter Demo',
+      theme:ThemeUtil.getlitghTheme(),
+      // home: MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: AppRoutes.INITIAL,
+      getPages: AppRoutes.routes,
+
+      builder: (BuildContext context, Widget child) {
+        initScreen(width: 1080, height: 1920);
+        return child;
+      },
+
+    );
+
+
+    // return MaterialApp(
+    //       title: 'Flutter Demo',
+    //       theme:ThemeUtil.getlitghTheme(),
+    //     home: MyHomePage());
 
 
   }

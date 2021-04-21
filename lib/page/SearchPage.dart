@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:zzfiction/controller/SearchController.dart';
 import 'package:zzfiction/managers/screen_manager.dart';
+import 'package:zzfiction/widget/ReadWidget.dart';
 
 class SearchPage extends GetView<SearchController>{
   @override
@@ -28,6 +29,10 @@ class SearchPage extends GetView<SearchController>{
            ),
           SizedBox(width: getWp(20),),
           GestureDetector(onTap: controller.searchContent,child: Text("搜索",style: TextStyle(color: Colors.grey),))
+          // GestureDetector(onTap: (){
+          //   Navigator.push(context, MaterialPageRoute(builder: (_)=>ReadWidget()));
+          //
+          // },child: Text("搜索",style: TextStyle(color: Colors.grey),))
          ],
        ),
      ),

@@ -9,8 +9,10 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:gbk2utf8/gbk2utf8.dart';
-import 'package:html/dom.dart';
+import 'package:html/dom.dart' as dom;
+import 'package:html/dom_parsing.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
 import 'package:http/io_client.dart';
@@ -50,19 +52,19 @@ class SearchEngine{
     var url = path360+content+" 小说";
     var response = await http.get(url,headers: headers);
 
-    Document document = parse(response.body);
+    dom.Document document = parse(response.body);
     //获取返回的结果,通过css 去判断
-    List<Element> re = document.getElementsByClassName("result");//该标签下的内容
+    List<dom.Element> re = document.getElementsByClassName("result");//该标签下的内容
     //获取这个result的list,每个就是一条数据
     //获取名字 最好有简介 还有链接
-    List<Element> lists= re[0].children;
+    List<dom.Element> lists= re[0].children;
     //每个元素就是一个 li,就是当前网页的一个item
     List<FictionSource> lst=[];
-    for(Element e in lists){
+    for(dom.Element e in lists){
       FictionSource fs=FictionSource();
       //为了获取链接
-      List<Element> elementsByTagName = e.getElementsByTagName("a");
-        for(Element ee in elementsByTagName){
+      List<dom.Element> elementsByTagName = e.getElementsByTagName("a");
+        for(dom.Element ee in elementsByTagName){
           LinkedHashMap<dynamic, String> map = ee.attributes;
           String link= map["data-mdurl"]??"";
           if(link.isNotEmpty){
@@ -100,7 +102,7 @@ class SearchEngine{
     String charSet = getCharset(response);
     fs.charset=charSet;
     print("charset=="+charSet);
-    Document document;
+    dom.Document document;
     if(charSet=="gbk"){
       document = parse(gbk.decode(response.body.codeUnits));
     }
@@ -110,7 +112,7 @@ class SearchEngine{
       document = parse(response.body);
     }
     // List<Element>  query = XPath.source(response.body).query("//a").elements();
-    List<Element>  query = document.body.getElementsByTagName("a");
+    List<dom.Element>  query = document.body.getElementsByTagName("a");
 
     List<FictionChapter> lists=[];
     query.forEach((element) {
@@ -123,8 +125,9 @@ class SearchEngine{
            ||((path.startsWith("http")||path.startsWith("https"))&&path.endsWith("html"))
        ){
          //处理一下这个全路径
-         path.substring(start)
-         absPath=path;
+         String temp=path.substring(path.indexOf("www"),path.length);
+
+         absPath=fs.scheme+"://"+temp;
        }else{
          absPath=fs.scheme+"://"+fs.host+path;
        
@@ -201,7 +204,7 @@ class SearchEngine{
     print("单章的地址=="+url);
     var response = await http.get(url,headers: headers);
     String charSet = fs.charset;
-  Document document;
+  dom.Document document;
   if(charSet=="gbk"){
     document = parse(gbk.decode(response.bodyBytes));
   }
@@ -215,9 +218,10 @@ class SearchEngine{
   }
 
 
-  Element contentElement = _getContentElement(document);
+  dom.Element contentElement = _getContentElement(document);
     if(contentElement!=null){
-     return contentElement.text;
+
+     return _getText(contentElement);
     }
 
   return "无数据";
@@ -225,20 +229,46 @@ class SearchEngine{
   //获取文章内容//设定好几种方式
   //一种class 一种id  class 又有 content contents Content Contents 直到返回数据为止 当前路径同时保存这个内容的读法
   //后面整个请求接口的? 循环整?
-  Element  _getContentElement(Document document){
-    Element elementById;
+  dom.Element  _getContentElement(dom.Document document){
+    dom.Element elementById;
     elementById = document.getElementById("content");
     if(elementById!=null){
       return elementById;
     }
-    List<String> listStr=["content","contents","Content","Contents"];
+    //搞个几把,把遇到的放进来就行
+    List<String> listStr=["content","contents","Content","Contents","ywskythunderfont"];
     for(String s in listStr){
-      List<Element>  list1=document.getElementsByClassName(s);
-      if(list1!=null){
+      List<dom.Element>  list1=document.getElementsByClassName(s);
+
+      if(list1!=null&&list1.length>0){
         return list1[0];
       }
     }
+
+
     return null;
+  }
+
+
+}
+String _getText(dom.Node node) => (_MyTextVisitor()..visit(node)).toString();
+
+
+
+class _MyTextVisitor extends TreeVisitor {
+  final _str = StringBuffer();
+
+  @override
+  String toString() => _str.toString();
+
+  @override
+  void visitText(dom.Text node) {
+    if(node.text.isEmpty){
+      _str.write("\n");
+    }else{
+      _str.write(node.data);
+    }
+
   }
 
 

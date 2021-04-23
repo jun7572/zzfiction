@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:zzfiction/repository/FictionRepository.dart';
 
 class ReadWidget2 extends StatefulWidget{
@@ -24,17 +25,40 @@ class ReadWidgetState2 extends State<ReadWidget2>{
   }
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return PageView.builder(
-        itemCount: list.length,
-        itemBuilder: (_,index){
-      return Container(
-        padding: EdgeInsets.symmetric(vertical: 0,horizontal: padding),
-        height: Get.height,
-        width: Get.width,
-        child: Text(list[index],style: TextStyle( fontStyle: FontStyle.normal, fontSize: 18,),),
-      );
-    });
+
+    return Stack(
+
+      children: [
+
+        PageView.builder(
+            itemCount: list.length,
+            itemBuilder: (_,index){
+              return Container(
+                padding: EdgeInsets.symmetric(vertical: 0,horizontal: padding),
+                height: Get.height,
+                width: Get.width,
+                child: Text(list[index],style: TextStyle( fontStyle: FontStyle.normal, fontSize: 18,),),
+              );
+            }),
+
+        Column(
+          children: [
+            SizedBox(height: 100,),
+            ElevatedButton(
+                child: Text("添加书籍"),
+                onPressed: (){
+
+                }),
+            ElevatedButton(
+                child: Text("查看书籍"),
+                onPressed: (){
+
+                }),
+          ],
+        ),
+      ],
+
+    );
   }
   aaaa()async{
     double _width=Get.width-(2*padding);

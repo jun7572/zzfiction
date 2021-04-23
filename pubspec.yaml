@@ -35,17 +35,15 @@ dependencies:
   gbk2utf8: ^1.0.1
   xpath_parse: 1.0.2
   get: 3.26.0
-
+  sqflite: 2.0.0+3
 
   native_progress_hud: ^1.0.5
-#  moor: 4.2.1
-  moor_flutter: 4.0.0
-
+  path_provider: 2.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  moor_generator: 4.2.1
+
   build_runner:
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

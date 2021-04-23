@@ -1,7 +1,10 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zzfiction/approute/PageName.dart';
 import 'package:zzfiction/controller/FictionSourceController.dart';
+import 'package:zzfiction/db/DataBaseManager.dart';
 import 'package:zzfiction/managers/screen_manager.dart';
 import 'package:zzfiction/widget/ReadWidget.dart';
 
@@ -16,7 +19,7 @@ class HomePage extends GetView<FictionSourceController>{
     return Scaffold(
       body:Column(
         children: [
-          Container(color: Theme.of(context).primaryColor,width: Get.width,height: getHp(700),padding: EdgeInsets.all(getWp(30)),
+          Container(color: Theme.of(context).primaryColor,width: Get.width,height: getHp(1000),padding: EdgeInsets.all(getWp(30)),
             child: Column(
               children: [
                 SizedBox(height: getHp(250),),
@@ -47,6 +50,20 @@ class HomePage extends GetView<FictionSourceController>{
                   ),
                 ),
 
+
+                ElevatedButton(
+                    child: Text("添加书籍"),
+                    onPressed: (){
+                      DataBaseManager().insertOneData();
+                    }),
+                ElevatedButton(
+                    child: Text("查找书籍111"),
+                    onPressed: ()async{
+                      List<Map<String,dynamic>> list= await DataBaseManager().queryAll();
+                      for(Map mm in list){
+                        print(mm.toString());
+                      }
+                    }),
               ],
             ),
           ),

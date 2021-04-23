@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
@@ -5,12 +7,17 @@ import 'package:zzfiction/SearchEngine.dart';
 import 'package:zzfiction/test/Test2.dart';
 import 'package:zzfiction/binding/HomeBinding.dart';
 import 'package:zzfiction/theme/ThemeUtil.dart';
+import 'package:zzfiction/utils/path_util.dart';
 
 import 'approute/AppRoutes.dart';
 import 'bean/FictionSource.dart';
+
+import 'db/DataBaseManager.dart';
 import 'managers/screen_manager.dart';
 
-void main() {
+void main()async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   ErrorWidget.builder=(errorDetails){
     return Builder(builder: (ctx){
       return Scaffold(
@@ -25,6 +32,7 @@ void main() {
     ChangeNotifierProvider(create: (_) => FictionSource()),
 
   ],child: MyApp(),));
+  DataBaseManager().init();
 
 }
 
@@ -34,6 +42,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     return GetMaterialApp(
       title: 'Flutter Demo',
       theme:ThemeUtil.getlitghTheme(),

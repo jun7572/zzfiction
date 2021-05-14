@@ -23,6 +23,8 @@ import 'package:path/path.dart' as path ;
 import 'package:zzfiction/bean/FictionSource.dart';
 import 'package:zzfiction/main.dart';
 
+import 'ContentKey.dart';
+
 // <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 class SearchEngine{
@@ -118,7 +120,7 @@ class SearchEngine{
     query.forEach((element) {
      if( element.text.contains("章")){
        String  path = element.attributes["href"];
-       String absPath="";
+       String absPath,absPath2="";
        //是不是全的网址
        // (path.startsWith("http")||path.startsWith("https"))&&path.endsWith("html")))
        if(path.contains("www")
@@ -129,10 +131,11 @@ class SearchEngine{
 
          absPath=fs.scheme+"://"+temp;
        }else{
+         //这里就不对,应该有两种
          absPath=fs.scheme+"://"+fs.host+path;
-       
+        absPath2=fs.path+path;
        }
-       lists.add(FictionChapter(title:element.text.toString(),path:path,absPath: absPath));
+       lists.add(FictionChapter(title:element.text.toString(),path:path,absPath: absPath,absPath2: absPath2));
      }
     });
     print("章节数=="+lists.length.toString());
@@ -172,7 +175,7 @@ class SearchEngine{
       fs.host=u.host;
       fs.scheme=u.scheme;
       bool orNot = _setFictionRestfulOrNot(fs.path);
-      fs.restful=orNot;
+      fs.restful=orNot.toString();
     }else{
       throw Exception("无http字符");
     }
@@ -198,11 +201,18 @@ class SearchEngine{
   //   }
   // }
   //获取单章的内容
- Future<String>  getSingleChapterContent(FictionSource fs ,int index)async{
+ Future<String>  getSingleChapterContent(FictionSource fs,int index)async{
 
   String url=  fs.chapters[index].absPath;
+
     print("单章的地址=="+url);
-    var response = await http.get(url,headers: headers);
+  print("单章的地址=="+fs.chapters[index].absPath2??"");
+  var response;
+  try{
+       response = await http.get(url,headers: headers);
+    }catch(e){
+    response = await http.get(fs.chapters[index].absPath2,headers: headers);
+    }
     String charSet = fs.charset;
   dom.Document document;
   if(charSet=="gbk"){
@@ -210,7 +220,12 @@ class SearchEngine{
   }
   else if(charSet=="utf-8"){
     // Utf8Codec().decode(response.bodyBytes)
-    document = parse(utf8.decode(response.bodyBytes));
+    try{
+      document = parse(utf8.decode(response.bodyBytes));
+    }catch(e){
+      print(e.toString());
+      document = parse(gbk.decode(response.bodyBytes));
+    }
 
   }else{
     document = parse(response.body);
@@ -220,8 +235,9 @@ class SearchEngine{
 
   dom.Element contentElement = _getContentElement(document);
     if(contentElement!=null){
-
-     return _getText(contentElement);
+      var getText = _getText(contentElement);
+      fs.chapters[index].content=getText;
+     return getText;
     }
 
   return "无数据";
@@ -236,7 +252,7 @@ class SearchEngine{
       return elementById;
     }
     //搞个几把,把遇到的放进来就行
-    List<String> listStr=["content","contents","Content","Contents","ywskythunderfont"];
+    List<String> listStr=Contentkey.list;
     for(String s in listStr){
       List<dom.Element>  list1=document.getElementsByClassName(s);
 
@@ -263,10 +279,18 @@ class _MyTextVisitor extends TreeVisitor {
 
   @override
   void visitText(dom.Text node) {
+
     if(node.text.isEmpty){
-      _str.write("\n");
+
+      // _str.write("\n\r");
     }else{
-      _str.write(node.data);
+      if(node.data.endsWith("\n")){
+        _str.write(node.data);
+      }else{
+        _str.write(node.data+"\n\n");
+      }
+
+
     }
 
   }

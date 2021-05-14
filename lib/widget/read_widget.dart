@@ -1,97 +1,126 @@
+import 'dart:io';
 import 'dart:ui' as ui;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:zzfiction/controller/ReadController.dart';
+import 'package:zzfiction/db/DataBaseManager.dart';
+import 'package:zzfiction/page/DirDrawer.dart';
 
 import 'package:zzfiction/repository/FictionRepository.dart';
 
-class ReadWidget2 extends StatefulWidget{
+class ReadWidget2 extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
     return ReadWidgetState2();
   }
-  
 }
+
 //扔一个String  处理成List<String>
-class ReadWidgetState2 extends State<ReadWidget2>{
-  double padding=17;
-  FictionRepository fs=Get.find<FictionRepository>();
-  List<String> list=[];
+class ReadWidgetState2 extends State<ReadWidget2> {
+  PageController pc = PageController();
+  ReadController controller = Get.find<ReadController>();
   @override
   void initState() {
-    aaaa();
+    controller.calculatePageNUms();
+    if (Platform.isAndroid) {
+      // SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+      //
+      // SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+      // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
+
+      // SystemChrome.restoreSystemUIOverlays();
+
+    }
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    controller.list.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
-
-    return Stack(
-
-      children: [
-
-        PageView.builder(
-            itemCount: list.length,
-            itemBuilder: (_,index){
-              return Container(
-                padding: EdgeInsets.symmetric(vertical: 0,horizontal: padding),
-                height: Get.height,
+    return Scaffold(
+      floatingActionButton: controller.isShowFloatButton()
+          ? FloatingActionButton(
+              onPressed: () {
+                controller.addOneBook();
+              },
+              backgroundColor: Theme.of(context).primaryColor,
+              child: Text(
+                "添加",
+                style: TextStyle(color: Colors.black),
+              ),
+            )
+          : null,
+      drawer: DirDrawer(),
+      body: GetBuilder<ReadController>(
+        init: Get.find<ReadController>(),
+        builder: (ctr) {
+          return Stack(
+            children: [
+              Container(
                 width: Get.width,
-                child: Text(list[index],style: TextStyle( fontStyle: FontStyle.normal, fontSize: 18,),),
-              );
-            }),
+                height: Get.height,
+                color: Color(0xFFCCE8CF),
+              ),
+              SafeArea(
+                child: PageView.builder(
+                    controller: pc,
+                    onPageChanged: ctr.onPageViewChange,
+                    itemCount: ctr.list.length,
+                    itemBuilder: (_, index) {
+                      return Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 0, horizontal: ctr.padding),
+                        height: Get.height,
+                        width: Get.width,
+                        child: Text(
+                          ctr.list[index],
+                          style: TextStyle(
+                            fontStyle: FontStyle.normal,
+                            fontSize: 18,
+                          ),
+                        ),
+                      );
+                    }),
+              ),
 
-        Column(
-          children: [
-            SizedBox(height: 100,),
-            ElevatedButton(
-                child: Text("添加书籍"),
-                onPressed: (){
-
-                }),
-            ElevatedButton(
-                child: Text("查看书籍"),
-                onPressed: (){
-
-                }),
-          ],
-        ),
-      ],
-
+              // Column(
+              //   children: [
+              //     SizedBox(height: 100,),
+              //     ElevatedButton(
+              //         child: Text("添加书籍"),
+              //         onPressed: ()async{
+              //           FictionRepository fs=Get.find<FictionRepository>();
+              //           await DataBaseManager().insertOneFiction(fs.currentFictionSource);
+              //           await fs.queryAllLocalBook();
+              //           ctr.update();
+              //           print("ok");
+              //         }),
+              //     ElevatedButton(
+              //         child: Text("查看书籍"),
+              //         onPressed: ()async{
+              //           List<Map<String,dynamic>> list= await  DataBaseManager().queryAllLocalFiction();
+              //
+              //           for(Map mm in list){
+              //             print(mm.toString());
+              //           }
+              //         }),
+              //     Text('${ctr.pageIndex} / ${ctr.list.length}'),
+              //   ],
+              //
+              // ),
+            ],
+          );
+        },
+      ),
     );
-  }
-  aaaa()async{
-    double _width=Get.width-(2*padding);
-    ParagraphBuilder build = ParagraphBuilder(ParagraphStyle(
-      fontStyle: FontStyle.normal,
-      fontSize: 18,
-    ))..pushStyle(ui.TextStyle(color: Colors.black));
-    build.addText(fs.currentFictionChapter.content??"啊?空的?");
-    // build.addText(s);
-    Paragraph build2 = build.build()..layout(ParagraphConstraints(width: _width));
-    List<LineMetrics>  lines = build2.computeLineMetrics();
-    //窗口大小
-    int floor = (Get.height/lines[0].height).floor()-2;
-    //这些文字分到屏幕上一共多少页
-    int pageNums=(lines.length/floor).floor();
-    print("当前章节一共"+pageNums.toString()+"页");
-    //得到一页最后一个文字位置,第二页 应该? 也是这个数量
-    int position = build2.getPositionForOffset(Offset(_width,(floor-1)*lines[0].height)).offset;
-    List<String> list1=[];
-    for(int k=0;k<pageNums;k++){
-        int start=position*k;
-        int end=position*(k+1)>=fs.currentFictionChapter.content.length?fs.currentFictionChapter.content.length:position*(k+1);
-          if(start>=fs.currentFictionChapter.content.length||end>=fs.currentFictionChapter.content.length){
-
-            break;
-          }
-       var substring = fs.currentFictionChapter.content.substring(start,end);
-        list1.add(substring);
-    }
-    list=list1;
-    setState(() {
-
-    });
-
   }
 }

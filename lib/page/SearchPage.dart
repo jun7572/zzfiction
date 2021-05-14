@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:zzfiction/controller/FictionSourceController.dart';
 import 'package:zzfiction/controller/SearchController.dart';
 import 'package:zzfiction/managers/screen_manager.dart';
 import 'package:zzfiction/widget/ReadWidget.dart';

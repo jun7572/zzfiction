@@ -1,6 +1,7 @@
-
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:zzfiction/SearchEngine.dart';
@@ -15,37 +16,43 @@ import 'bean/FictionSource.dart';
 import 'db/DataBaseManager.dart';
 import 'managers/screen_manager.dart';
 
-void main()async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  ErrorWidget.builder=(errorDetails){
-    return Builder(builder: (ctx){
+  // if (Platform.isAndroid) {
+  //   SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+  //
+  //   SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+  //   // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
+  //
+  //
+  // }
+  ErrorWidget.builder = (errorDetails) {
+    return Builder(builder: (ctx) {
       return Scaffold(
-          appBar: AppBar(),
-          body: Center(child: Text("出错了"),),
+        appBar: AppBar(),
+        body: Center(
+          child: Text("出错了"),
+        ),
       );
     });
   };
 
-
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => FictionSource()),
-
-  ],child: MyApp(),));
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => FictionSource()),
+    ],
+    child: MyApp(),
+  ));
   DataBaseManager().init();
-
 }
-
-
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return GetMaterialApp(
       title: 'Flutter Demo',
-      theme:ThemeUtil.getlitghTheme(),
+      theme: ThemeUtil.getlitghTheme(),
       // home: MyHomePage(title: 'Flutter Demo Home Page'),
       initialRoute: AppRoutes.INITIAL,
       getPages: AppRoutes.routes,
@@ -54,26 +61,19 @@ class MyApp extends StatelessWidget {
         initScreen(width: 1080, height: 1920);
         return child;
       },
-
     );
-
 
     // return MaterialApp(
     //       title: 'Flutter Demo',
     //       theme:ThemeUtil.getlitghTheme(),
     //     home: MyHomePage());
-
-
   }
 }
-
-
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key}) : super(key: key);
 
-
-   String title;
+  String title;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -81,13 +81,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-  List<FictionSource> search360=[];
-  void _incrementCounter() async{
-     // search360 =await SearchEngine().search360("万族之劫");
-     search360 =await SearchEngine().search360("烂柯棋缘");
-     setState(() {
-
-     });
+  List<FictionSource> search360 = [];
+  void _incrementCounter() async {
+    // search360 =await SearchEngine().search360("万族之劫");
+    search360 = await SearchEngine().search360("烂柯棋缘");
+    setState(() {});
   }
 
   @override
@@ -100,31 +98,32 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: ListView.builder(
           itemCount: search360.length,
-          itemBuilder: (_,index){
-        return GestureDetector(
-          onTap: ()async{
-            print("asdfa");
-            FictionSource openUrlToGetContent =await SearchEngine().openSourceToGetDirs(search360[index]);
+          itemBuilder: (_, index) {
+            return GestureDetector(
+              onTap: () async {
+                print("asdfa");
+                FictionSource openUrlToGetContent =
+                    await SearchEngine().openSourceToGetDirs(search360[index]);
 
-            context.read<FictionSource>().updateSource(openUrlToGetContent);
+                context.read<FictionSource>().updateSource(openUrlToGetContent);
 
-
-            Navigator.push(context, MaterialPageRoute(builder: (BuildContext context){
-              return Test2();
-            }));
-
-          },
-          child: Column(
-            children: [
-              Text(search360[index].title+"\n\n"),
-
-              Text(search360[index].path),
-              Divider(height: 2,color: Colors.blueGrey,),
-            ],
-          ),
-        );
-
-      }),
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
+                  return Test2();
+                }));
+              },
+              child: Column(
+                children: [
+                  Text(search360[index].title + "\n\n"),
+                  Text(search360[index].path),
+                  Divider(
+                    height: 2,
+                    color: Colors.blueGrey,
+                  ),
+                ],
+              ),
+            );
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',

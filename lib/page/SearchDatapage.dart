@@ -22,9 +22,11 @@ class SearchDatapage extends StatelessWidget{
             return TextButton(
 
               child: Card(
-               child: Padding(padding: EdgeInsets.all(10),child: Row(
+               child: Padding(padding: EdgeInsets.all(10),child: Column(
                 children: [
                   Text( fs.fss[index].title),
+
+                  Text( fs.fss[index].path),
                 ],
               ),),
             ),onPressed: ()async{

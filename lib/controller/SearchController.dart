@@ -5,6 +5,7 @@ import 'package:zzfiction/SearchEngine.dart';
 import 'package:zzfiction/approute/PageName.dart';
 import 'package:zzfiction/bean/FictionSource.dart';
 import 'package:zzfiction/repository/FictionRepository.dart';
+import 'package:zzfiction/utils/DialogUtil.dart';
 
 import 'FictionSourceController.dart';
 //这个放历史记录啊啥的
@@ -16,11 +17,11 @@ class SearchController extends GetxController{
  }
  //按钮点击事件
  searchContent()async{
-    NativeProgressHud.showWaiting();
+    DialogUtil.showLoading();
     //todo 记得过滤成功失败的情形
     FictionRepository find = Get.find<FictionRepository>();
     find.fss=await SearchEngine().search360(_search);
-    NativeProgressHud.hideWaiting();
+    DialogUtil.dismissLoading();
     Get.toNamed(PageName.SearchDatapage);
  }
 @override

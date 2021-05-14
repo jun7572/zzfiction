@@ -5,8 +5,8 @@ import 'package:zzfiction/controller/ReadController.dart';
 import 'package:zzfiction/widget/ReadWidget.dart';
 import 'package:zzfiction/widget/read_widget.dart';
 
-class ReadPage extends GetView<ReadController>{
-  int index =0;
+class ReadPage extends GetView<ReadController> {
+  int index = 0;
   //先放里面吧
   @override
   Widget build(BuildContext context) {
@@ -15,5 +15,4 @@ class ReadPage extends GetView<ReadController>{
       body: ReadWidget2(),
     );
   }
-
 }

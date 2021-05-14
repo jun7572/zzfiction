@@ -1,45 +1,57 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zzfiction/approute/PageName.dart';
 import 'package:zzfiction/bean/FictionSource.dart';
+import 'package:zzfiction/repository/FictionRepository.dart';
 
-class FictionSourceController extends SuperController<FictionSource>{
-  TextEditingController textEditingController=TextEditingController();
-
-  String _search="";
-  onSearchChange(String s){
-    _search=s;
+class FictionSourceController extends SuperController<FictionSource>
+    with SingleGetTickerProviderMixin {
+  TextEditingController textEditingController = TextEditingController();
+  final List<Tab> myTabs = [
+    Tab(
+      text: "搜索",
+      icon: new Icon(Icons.search_rounded),
+    ),
+    Tab(
+      text: "我的书库",
+      icon: new Icon(Icons.list_alt_rounded),
+    ),
+  ];
+  String _search = "";
+  onSearchChange(String s) {
+    _search = s;
     print(s);
-
   }
-  toSearchPgae(){
+
+  toSearchPgae() {
     Get.toNamed(PageName.Searchpage);
   }
+
+  TabController tc;
   //初始化第一次的资源
   @override
   void onInit() {
-    // TODO: implement onInit
+    tc = TabController(initialIndex: 0, length: myTabs.length, vsync: this);
+
     super.onInit();
   }
 
   @override
-  void onDetached() {
-
-  }
+  void onDetached() {}
 
   @override
-  void onInactive() {
-
-  }
+  void onInactive() {}
 
   @override
-  void onPaused() {
-
-  }
+  void onPaused() {}
 
   @override
-  void onResumed() {
-
+  void onResumed() {}
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+    tc.dispose();
   }
-
 }

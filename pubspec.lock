@@ -8,6 +8,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "20.0.0"
+  alert:
+    dependency: "direct main"
+    description:
+      name: alert
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.1"
   analyzer:
     dependency: transitive
     description:
@@ -223,13 +230,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_native_alert:
+  flutter_colorpicker:
     dependency: "direct main"
     description:
-      name: flutter_native_alert
+      name: flutter_colorpicker
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.2.1"
+    version: "0.4.0"
   flutter_native_splash:
     dependency: "direct dev"
     description:
@@ -270,6 +277,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.0"
+  hive:
+    dependency: "direct main"
+    description:
+      name: hive
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.4"
   html:
     dependency: "direct main"
     description:
@@ -480,6 +494,20 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.0"
+  screen:
+    dependency: "direct main"
+    description:
+      name: screen
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.5"
+  scrollable_positioned_list:
+    dependency: "direct main"
+    description:
+      name: scrollable_positioned_list
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.10"
   shelf:
     dependency: transitive
     description:

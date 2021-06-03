@@ -22,6 +22,8 @@ import 'package:path/path.dart' as path ;
 
 import 'package:zzfiction/bean/FictionSource.dart';
 import 'package:zzfiction/main.dart';
+import 'package:zzfiction/utils/DialogUtil.dart';
+import 'package:zzfiction/utils/PrintUtil.dart';
 
 import 'ContentKey.dart';
 
@@ -82,10 +84,10 @@ class SearchEngine{
 
         }
 
-      print("\n");
+      PrintUtil.prints("\n");
     }
     for(FictionSource fss in lst){
-      print(fss.toString());
+      PrintUtil.prints(fss.toString());
     }
         return lst;
   }
@@ -94,6 +96,7 @@ class SearchEngine{
   //  通过a去获取 文章列表
   Future<FictionSource> openSourceToGetDirs(FictionSource fs)async{
     String url=fs.path;
+    PrintUtil.prints("打开的url="+url);
     //处理一下
     getHostAndSetRestful(fs);
     HttpClient client = HttpClient();
@@ -104,12 +107,21 @@ class SearchEngine{
     String charSet = getCharset(response);
     fs.charset=charSet;
     print("charset=="+charSet);
+    //todo 这里到时候可以试试三个 哪个有返回了就使用哪个!
     dom.Document document;
     if(charSet=="gbk"){
       document = parse(gbk.decode(response.body.codeUnits));
     }
     else if(charSet=="utf-8"){
-       document = parse(utf8.decode(response.body.codeUnits));
+
+      try{
+        document = parse(utf8.decode(response.body.codeUnits));
+      }catch(e){
+        print(e.toString());
+        fs.charset="";
+        // document = parse(gbk.decode(response.body.codeUnits));
+        document = parse(response.body);
+      }
     }else{
       document = parse(response.body);
     }
@@ -135,15 +147,124 @@ class SearchEngine{
          absPath=fs.scheme+"://"+fs.host+path;
         absPath2=fs.path+path;
        }
-       lists.add(FictionChapter(title:element.text.toString(),path:path,absPath: absPath,absPath2: absPath2));
+       lists.add(FictionChapter(title:element.text.toString().replaceAll(" ", "").replaceAll("\n", "").trim(),path:path,absPath: absPath,absPath2: absPath2));
      }
     });
     print("章节数=="+lists.length.toString());
+    //没有章字的就使用a就行
+    if(lists.length<20){
+      int length=0;
+      List<dom.Element> contentElement=[];
+
+      List<dom.Element>  elementsByTagName = document.body.getElementsByTagName("li");
+      List<dom.Element>  elementsByTagName2 = document.body.getElementsByTagName("dd");
+      List<dom.Element>  elementsByTagName3 = document.body.getElementsByTagName("dt");
+      if(elementsByTagName.length>length){
+          length= elementsByTagName.length;
+          contentElement=elementsByTagName;
+      }
+      if(elementsByTagName2.length>length){
+        length= elementsByTagName2.length;
+        contentElement=elementsByTagName2;
+      }
+      if(elementsByTagName3.length>length){
+        length= elementsByTagName3.length;
+        contentElement=elementsByTagName3;
+      }
+
+
+      if(contentElement!=null){
+        for(dom.Element ss in contentElement){
+          List<dom.Element> lll  = ss.getElementsByTagName("a");
+          dom.Element sss= lll[0];
+          if(lll!=null&&lll.length>=1){
+
+            String  path = sss.attributes["href"];
+            String absPath,absPath2="";
+            //是不是全的网址
+            // (path.startsWith("http")||path.startsWith("https"))&&path.endsWith("html")))
+            if(path.contains("www")
+                ||((path.startsWith("http")||path.startsWith("https"))&&path.endsWith("html"))
+            ){
+              //处理一下这个全路径
+              String temp=path.substring(path.indexOf("www"),path.length);
+
+              absPath=fs.scheme+"://"+temp;
+            }else{
+              //这里就不对,应该有两种
+              absPath=fs.scheme+"://"+fs.host+path;
+              absPath2=fs.path+path;
+            }
+
+            lists.add(FictionChapter(title:sss.text.toString().replaceAll(" ", "").replaceAll("\\n", "").trim(),path:path,absPath: absPath,absPath2: absPath2));
+          }
+
+        }
+      }
+
+    }
     fs.chapters=lists;
     return fs;
    
 
   }
+  //刷新章节,看完了和手动调用
+  Future<FictionSource> refreshLocalDir(FictionSource fs)async{
+    String url=fs.path;
+    HttpClient client = HttpClient();
+    var response = await http.get(url,headers: headers);
+    dom.Document document;
+    String charSet =fs.charset;
+    if(charSet=="gbk"){
+      document = parse(gbk.decode(response.body.codeUnits));
+    }
+    else if(charSet=="utf-8"){
+
+      try{
+        document = parse(utf8.decode(response.body.codeUnits));
+      }catch(e){
+        print(e.toString());
+        fs.charset="";
+        // document = parse(gbk.decode(response.body.codeUnits));
+        document = parse(response.body);
+      }
+    }else{
+      document = parse(response.body);
+    }
+
+    List<dom.Element>  query = document.body.getElementsByTagName("a");
+
+    List<FictionChapter> lists=[];
+    query.forEach((element) {
+      if( element.text.contains("章")){
+        String  path = element.attributes["href"];
+        String absPath,absPath2="";
+        //是不是全的网址
+        // (path.startsWith("http")||path.startsWith("https"))&&path.endsWith("html")))
+        if(path.contains("www")
+            ||((path.startsWith("http")||path.startsWith("https"))&&path.endsWith("html"))
+        ){
+          //处理一下这个全路径
+          String temp=path.substring(path.indexOf("www"),path.length);
+
+          absPath=fs.scheme+"://"+temp;
+        }else{
+          //这里就不对,应该有两种
+          absPath=fs.scheme+"://"+fs.host+path;
+          absPath2=fs.path+path;
+        }
+        lists.add(FictionChapter(title:element.text.toString(),path:path,absPath: absPath,absPath2: absPath2));
+      }
+    });
+    print("章节数=="+lists.length.toString());
+    int d=lists.length-fs.chapters.length;
+    DialogUtil.showToast("跟新了$d章");
+    fs.chapters=lists;
+    return fs;
+  }
+
+
+
   //<meta http-equiv="Content-Type" content="text/html; charset=gbk">
   //获取当前网页的字符集//不能通过header去获取,不准,最好是去拿head标签的contenttype
  String getCharset(var response){
@@ -190,6 +311,7 @@ class SearchEngine{
       return true;
     }
   }
+  static final String noData="无数据";
   // static String decompress(String zipText) {
   //   final List<int> compressed = base64Decode(zipText);
   //   if (compressed.length > 4) {
@@ -202,17 +324,40 @@ class SearchEngine{
   // }
   //获取单章的内容
  Future<String>  getSingleChapterContent(FictionSource fs,int index)async{
+    if(index>=fs.chapters.length){
+      return noData;
+    }
 
   String url=  fs.chapters[index].absPath;
 
     print("单章的地址=="+url);
   print("单章的地址=="+fs.chapters[index].absPath2??"");
   var response;
-  try{
-       response = await http.get(url,headers: headers);
+
+
+  if(fs.usePathIndex==0){
+    try{
+      response = await http.get(url,headers: headers);
+      fs.usePathIndex=1;
     }catch(e){
-    response = await http.get(fs.chapters[index].absPath2,headers: headers);
+      print(e.toString());
+      try{
+        response = await http.get(fs.chapters[index].absPath2,headers: headers);
+        fs.usePathIndex=2;
+      }catch(e){
+        print(e.toString());
+        return noData;
+      }
+
     }
+  }else if(fs.usePathIndex==1){
+    response = await http.get(url,headers: headers);
+  }else{
+    response = await http.get(fs.chapters[index].absPath2,headers: headers);
+  }
+
+
+
     String charSet = fs.charset;
   dom.Document document;
   if(charSet=="gbk"){
@@ -240,7 +385,7 @@ class SearchEngine{
      return getText;
     }
 
-  return "无数据";
+  return noData;
   }
   //获取文章内容//设定好几种方式
   //一种class 一种id  class 又有 content contents Content Contents 直到返回数据为止 当前路径同时保存这个内容的读法
@@ -248,6 +393,14 @@ class SearchEngine{
   dom.Element  _getContentElement(dom.Document document){
     dom.Element elementById;
     elementById = document.getElementById("content");
+    if(elementById!=null){
+      return elementById;
+    }
+    elementById = document.getElementById("contents");
+    if(elementById!=null){
+      return elementById;
+    }
+    elementById = document.getElementById("Content");
     if(elementById!=null){
       return elementById;
     }
@@ -259,6 +412,7 @@ class SearchEngine{
       if(list1!=null&&list1.length>0){
         return list1[0];
       }
+
     }
 
 
@@ -279,6 +433,7 @@ class _MyTextVisitor extends TreeVisitor {
 
   @override
   void visitText(dom.Text node) {
+    node.text= node.text.replaceAll(" ", "").trim();
 
     if(node.text.isEmpty){
 
@@ -287,7 +442,7 @@ class _MyTextVisitor extends TreeVisitor {
       if(node.data.endsWith("\n")){
         _str.write(node.data);
       }else{
-        _str.write(node.data+"\n\n");
+        _str.write("       "+node.data+"\n\n");
       }
 
 

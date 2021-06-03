@@ -25,7 +25,7 @@ class FictionSourceController extends SuperController<FictionSource>
   }
 
   toSearchPgae() {
-    Get.toNamed(PageName.Searchpage);
+    Get.toNamed(AppPage.Searchpage);
   }
 
   TabController tc;

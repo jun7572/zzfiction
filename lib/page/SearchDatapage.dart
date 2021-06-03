@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:native_progress_hud/native_progress_hud.dart';
 import 'package:zzfiction/approute/PageName.dart';
 import 'package:zzfiction/repository/FictionRepository.dart';
+import 'package:zzfiction/utils/DialogUtil.dart';
 
 import '../SearchEngine.dart';
   //搜索回来的所有数据源
@@ -30,7 +31,9 @@ class SearchDatapage extends StatelessWidget{
                 ],
               ),),
             ),onPressed: ()async{
-              fs.getFictionDirs(index);
+                DialogUtil.showLoading();
+             await fs.getFictionDirs(index);
+             DialogUtil.dismissLoading();
             },);
           }),
     );

@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:zzfiction/approute/PageName.dart';
 import 'package:zzfiction/controller/FictionSourceController.dart';
 import 'package:zzfiction/db/DataBaseManager.dart';
+import 'package:zzfiction/gen_a/A.dart';
 import 'package:zzfiction/managers/screen_manager.dart';
+import 'package:zzfiction/utils/PreloadManager.dart';
 import 'package:zzfiction/widget/ReadWidget.dart';
 
 import 'BookRepositoryPage.dart';
@@ -14,23 +16,35 @@ class HomePage extends GetView<FictionSourceController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       bottomNavigationBar: TabBar(
         controller: controller.tc,
         tabs: controller.myTabs,
+
       ),
       body: TabBarView(controller: controller.tc, children: [
         Column(
           children: [
             Container(
-              color: Theme.of(context).primaryColor,
+
               width: Get.width,
-              height: getHp(500),
+
               padding: EdgeInsets.all(getWp(30)),
               child: Column(
                 children: [
                   SizedBox(
                     height: getHp(250),
                   ),
+                  Row(
+                    children: [
+                        Spacer(),
+                      Image.asset(A.assets_doglogo),
+                      SizedBox(width: 30,),
+                      Text("菜狗搜索",style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
+                      Spacer(),
+                    ],
+                  ),
+                  SizedBox(height: 30,),
                   GestureDetector(
                     onTap: controller.toSearchPgae,
                     // onTap:(){
@@ -40,7 +54,8 @@ class HomePage extends GetView<FictionSourceController> {
                       width: Get.width,
                       height: getHp(150),
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(getHp(30)),
+                          borderRadius: BorderRadius.circular(getHp(100)),
+                          border: Border.all(width: 1,color: Colors.black),
                           color: Colors.white),
                       child: Center(
                         child: Padding(
@@ -55,7 +70,7 @@ class HomePage extends GetView<FictionSourceController> {
                               Expanded(child: SizedBox()),
                               Icon(
                                 Icons.history_rounded,
-                                color: Colors.grey,
+
                               ),
                             ],
                           ),
@@ -63,9 +78,11 @@ class HomePage extends GetView<FictionSourceController> {
                       ),
                     ),
                   ),
+
                 ],
               ),
             ),
+
           ],
         ),
         BookRepositoryPage(),

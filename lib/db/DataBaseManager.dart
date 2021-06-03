@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:zzfiction/bean/FictionSource.dart';
+import 'package:zzfiction/utils/PrintUtil.dart';
 
 
 
@@ -22,7 +23,7 @@ class DataBaseManager {
   init()async{
     // /data/user/0/yueyu.june.jun.yueyu/databases
     String path=await getDatabasesPath();
-    print("path==="+path);
+    PrintUtil.prints("path==="+path);
 
     var dbpath = join(path,dataName);
     _database= await openDatabase(dbpath,onCreate: createTable,version: 1);
@@ -38,7 +39,7 @@ class DataBaseManager {
   //     String content;
   Future  createTable(Database db, int newVersion)async{
     //BLOB  Uint8List
-    String str='CREATE TABLE $table (fiction_id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, path TEXT,host TEXT,scheme TEXT,restful TEXT,charset TEXT,readdingChapter INTEGER)';
+    String str='CREATE TABLE $table (fiction_id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, path TEXT,host TEXT,scheme TEXT,restful TEXT,charset TEXT,readdingChapter INTEGER,usePathIndex INTEGER)';
     String str1='CREATE TABLE $tableChapter (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, path TEXT,absPath TEXT,absPath2 TEXT,content TEXT,fictionId INTEGER)';
     // String str='create table Test (id INTEGER PRIMARY KEY, name TEXT, value INTEGER)';
     // String ste='DROP TABLE IF EXISTS $table';
@@ -55,7 +56,7 @@ class DataBaseManager {
     //成功插入返回当前行的id
     Map<String, Object> map=fictionSource.toJson();
    var id = await _database.insert(table, map);
-   print("插入书籍id为=="+id.toString());
+    PrintUtil.prints("插入书籍id为=="+id.toString());
     Batch batch = _database.batch();
     for(int i=0; i<fictionSource.chapters.length;i++){
       fictionSource.chapters[i].fictionId=id;
@@ -63,6 +64,25 @@ class DataBaseManager {
     }
 
     return batch.commit();
+  }
+  //把新的章节差入数据库
+  // 传入一个更新list后的FictionSource
+  Future<List<Object>> updateFiction(FictionSource fictionSource)async{
+    List<FictionChapter> list=  await queryChapters(fictionSource.id);
+    List<FictionChapter> newList=[];
+
+    if(fictionSource.chapters.length>list.length){
+      Batch batch = _database.batch();
+      for(int i=list.length;i<fictionSource.chapters.length;i++){
+        PrintUtil.prints('插入${fictionSource.chapters[i].toJson()}');
+        batch.insert(tableChapter,  fictionSource.chapters[i].toJson());
+      }
+    return batch.commit();
+    }
+
+
+
+
   }
 
   // //[ASC | DESC]; 排序
@@ -76,7 +96,7 @@ class DataBaseManager {
      List<Map<String, Object>> list= await _database.query(tableChapter,where:'fictionId=?',whereArgs: [id]);
      List<FictionChapter> list1=[];
      list.forEach((element) {
-       print(element.toString());
+
        list1.add(FictionChapter.fromJson(element));
      });
      return list1;
@@ -85,7 +105,7 @@ class DataBaseManager {
   }
   //插入一章的内容,当前的那章??
   updateOneChapterContent(FictionChapter fictionChapter){
-    print("跟新一章的内容");
+    PrintUtil.prints("跟新一章的内容");
         //todo
       // String strsql='UPDATE $tableChapter  SET content = ?, [${fictionChapter.content}])';
     // _database.rawUpdate( );
@@ -97,7 +117,12 @@ class DataBaseManager {
 
     _database.update(table,fictionSource.toJson(),where: 'fiction_id=?',whereArgs: [fictionSource.id]);
   }
+  deleteOneBook(FictionSource fictionSource)async{
+    await _database.delete(tableChapter,where: 'fictionId=?',whereArgs: [fictionSource.id]);
+   await _database.delete(table,where: 'fiction_id=?',whereArgs: [fictionSource.id]);
 
+
+ }
 
 
 

@@ -16,7 +16,14 @@ class BookRepositoryController extends SuperController {
     var find = Get.find<FictionRepository>();
     await find.openLocalBook(index);
     DialogUtil.dismissLoading();
-    Get.toNamed(PageName.ReadPage);
+    Get.toNamed(AppPage.ReadPage);
+  }
+  deleteOneBook(int index)async{
+    DialogUtil.showLoading();
+    var find = Get.find<FictionRepository>();
+    await find.deleteOneLocalBook(index);
+    DialogUtil.dismissLoading();
+    update();
   }
   @override
   void onReady() {

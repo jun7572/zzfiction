@@ -1,7 +1,9 @@
+
 import 'package:get/get.dart';
 import 'package:zzfiction/approute/PageName.dart';
 import 'package:zzfiction/bean/FictionSource.dart';
 import 'package:zzfiction/db/DataBaseManager.dart';
+import 'package:zzfiction/utils/DialogUtil.dart';
 
 import '../SearchEngine.dart';
 //这层出去的尽量都是实体,不要在controller进行数据库操作
@@ -26,12 +28,17 @@ class FictionRepository {
       currentFictionSource.chapters[index].content=s;
       currentFictionSource.readdingChapter=index;
       currentFictionChapter=currentFictionSource.chapters[index];
-      Get.toNamed(PageName.ReadPage);
+      Get.toNamed(AppPage.ReadPage);
     }
     getFictionDirs(int index)async{
      currentFictionSource=fss[index];
-      await updateFictionSourceList();
-      Get.toNamed(PageName.FictionDirpage);
+     try{
+       await updateFictionSourceList();
+     }catch( e){
+       DialogUtil.showToast("该源失效");
+     }
+
+      Get.toNamed(AppPage.FictionDirpage);
     }
     //查询所有的本地书籍
    queryAllLocalBook()async{
@@ -61,6 +68,13 @@ class FictionRepository {
      currentFictionChapter= currentFictionSource.chapters[currentFictionSource.readdingChapter];
       return currentFictionSource.chapters[currentFictionSource.readdingChapter].content;
     }
+  }
+  Future deleteOneLocalBook(int index)async{
+    FictionSource  c=localFss[index];
+   await DataBaseManager().deleteOneBook(c);
+    localFss.removeAt(index);
+    // currentFictionSource.chapters.
+    return ;
   }
   //打开一张
   openOneChapter(){

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:native_progress_hud/native_progress_hud.dart';
 import 'package:zzfiction/SearchEngine.dart';
 import 'package:zzfiction/approute/PageName.dart';
@@ -22,12 +23,15 @@ class SearchController extends GetxController{
     FictionRepository find = Get.find<FictionRepository>();
     find.fss=await SearchEngine().search360(_search);
     DialogUtil.dismissLoading();
-    Get.toNamed(PageName.SearchDatapage);
+    Get.toNamed(AppPage.SearchDatapage);
  }
 @override
   void onReady() {
 
 
+  }
+  getlocalSearchData()async{
+   // await Hive.openBox(name)
   }
   @override
   void onInit() {

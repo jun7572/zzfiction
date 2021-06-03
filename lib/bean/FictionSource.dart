@@ -19,7 +19,11 @@ class FictionSource with ChangeNotifier,DiagnosticableTreeMixin{
   int readdingChapter;
   //数据库id
   int id;
+  //新增使用哪个源字段 //0 1 2
+  // 0是在初始化的时候使用,1是使用path1 2是使用path2
+  int usePathIndex=0;
   FictionSource({this.path,this.title});
+
   setChapters( List<FictionChapter> chapters){
     this.chapters=chapters;
     notifyListeners();
@@ -46,6 +50,7 @@ class FictionSource with ChangeNotifier,DiagnosticableTreeMixin{
     charset = json['charset'];
     restful = json['restful'];
     id = json['fiction_id'];
+    usePathIndex = json['usePathIndex'];
 
   }
   // String str='CREATE TABLE $table (fiction_id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, path TEXT,host TEXT,index INTEGER,restful BLOB,charset TEXT,readdingChapter INTEGER)';
@@ -58,6 +63,7 @@ class FictionSource with ChangeNotifier,DiagnosticableTreeMixin{
 
     data['charset'] = this.charset;
     data['fiction_id'] = this.id;
+    data['usePathIndex'] = this.usePathIndex;
     data['readdingChapter'] = this.readdingChapter;
     data['restful'] = this.restful.toString();
 
@@ -93,6 +99,9 @@ class FictionChapter{
     //哪一本书
     int fictionId;
     int id;
+    //实时计算出来的list //好像没用啊
+    List<FictionChapterStr> listStr;
+    int index;
 
     FictionChapter({this.title, this.path, this.absPath,this.absPath2});
     Map<String, dynamic> toJson() {
@@ -118,5 +127,18 @@ class FictionChapter{
       content = json['content'];
       fictionId = json['fictionId'];
       id = json['id'];
+      index=0;
     }
+
+}
+//一章分很多页
+class FictionChapterStr{
+  int index;
+  String content;
+  int id;
+  String title;
+  //总页数大小
+  int totalSize;
+
+  FictionChapterStr(this.index, this.content, this.id,this.title,this.totalSize);
 }

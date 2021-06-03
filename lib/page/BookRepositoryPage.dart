@@ -19,12 +19,18 @@ class BookRepositoryPage extends GetView<BookRepositoryController>{
           return  GridView.builder(
               itemCount: fr.localFss.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,mainAxisSpacing: 5,crossAxisSpacing: 5,childAspectRatio:0.8), itemBuilder: (_,index){
-            return Container(
-              color: Colors.grey[100],
-              child: Center(
-                child: TextButton(child: Text(fr.localFss[index].title,style: TextStyle(color: Colors.black),),onPressed: (){
-                  controller.openLocalBook(index);
-                },),
+            return GestureDetector(
+              onTap: (){
+                controller.openLocalBook(index);
+              },
+              onLongPress: (){
+                  controller.deleteOneBook(index);
+              },
+              child: Container(
+                color: Colors.grey[100],
+                child: Center(
+                  child: TextButton(child: Text(fr.localFss[index].title,style: TextStyle(color: Colors.black),),),
+                ),
               ),
             );
           });

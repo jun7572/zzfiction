@@ -91,6 +91,48 @@ class SearchEngine{
     }
         return lst;
   }
+  Future<List<FictionSource>> search360Loadmore(String content,int pagenum)async{
+    var url = path360+content+" 小说&pn=$pagenum";
+    var response = await http.get(url,headers: headers);
+
+    dom.Document document = parse(response.body);
+    //获取返回的结果,通过css 去判断
+    List<dom.Element> re = document.getElementsByClassName("result");//该标签下的内容
+    //获取这个result的list,每个就是一条数据
+    //获取名字 最好有简介 还有链接
+    List<dom.Element> lists= re[0].children;
+    //每个元素就是一个 li,就是当前网页的一个item
+    List<FictionSource> lst=[];
+    for(dom.Element e in lists){
+      FictionSource fs=FictionSource();
+      //为了获取链接
+      List<dom.Element> elementsByTagName = e.getElementsByTagName("a");
+      for(dom.Element ee in elementsByTagName){
+        LinkedHashMap<dynamic, String> map = ee.attributes;
+        String link= map["data-mdurl"]??"";
+        if(link.isNotEmpty){
+          fs.path=link;
+          print("link="+link);
+          fs.title=content;
+          lst.add(fs);
+          break;
+        }
+        //描述 res-desc
+        // String s=lh["desc"];
+        // print("asdf="+s.toString());
+
+      }
+
+      PrintUtil.prints("\n");
+    }
+    for(FictionSource fss in lst){
+      PrintUtil.prints(fss.toString());
+    }
+    return lst;
+
+  }
+
+
   //有些信息可以去获取<head>标签
   //打开某个Url,返回内容
   //  通过a去获取 文章列表
@@ -392,18 +434,13 @@ class SearchEngine{
   //后面整个请求接口的? 循环整?
   dom.Element  _getContentElement(dom.Document document){
     dom.Element elementById;
-    elementById = document.getElementById("content");
-    if(elementById!=null){
-      return elementById;
+    for(String s in Contentkey.listId){
+      elementById = document.getElementById(s);
+      if(elementById!=null){
+        return elementById;
+      }
     }
-    elementById = document.getElementById("contents");
-    if(elementById!=null){
-      return elementById;
-    }
-    elementById = document.getElementById("Content");
-    if(elementById!=null){
-      return elementById;
-    }
+
     //搞个几把,把遇到的放进来就行
     List<String> listStr=Contentkey.list;
     for(String s in listStr){

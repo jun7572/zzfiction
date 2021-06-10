@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
       getPages: AppRoutes.routes,
 
       builder: (BuildContext context, Widget child) {
-        initScreen(width: 1080, height: 1920);
+        initScreen(width: 375, height: 667);
         return child;
       },
     );

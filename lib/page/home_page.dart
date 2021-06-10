@@ -17,7 +17,9 @@ class HomePage extends GetView<FictionSourceController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
+
       bottomNavigationBar: TabBar(
+
         controller: controller.tc,
         tabs: controller.myTabs,
 
@@ -29,22 +31,22 @@ class HomePage extends GetView<FictionSourceController> {
 
               width: Get.width,
 
-              padding: EdgeInsets.all(getWp(30)),
+              // padding: EdgeInsets.all(getWp(30)),
               child: Column(
                 children: [
                   SizedBox(
-                    height: getHp(250),
+                    height: getHp(163),
                   ),
                   Row(
                     children: [
                         Spacer(),
-                      Image.asset(A.assets_doglogo),
-                      SizedBox(width: 30,),
-                      Text("菜狗搜索",style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
+                      Image.asset(A.assets_home_logo,width: getWp(235),height: getHp(48.5),),
+                      // SizedBox(width: 30,),
+                      // Text("菜狗搜索",style: TextStyle(fontSize: 40,fontWeight: FontWeight.bold),),
                       Spacer(),
                     ],
                   ),
-                  SizedBox(height: 30,),
+                  SizedBox(height: 26,),
                   GestureDetector(
                     onTap: controller.toSearchPgae,
                     // onTap:(){
@@ -52,10 +54,11 @@ class HomePage extends GetView<FictionSourceController> {
                     // },
                     child: Container(
                       width: Get.width,
-                      height: getHp(150),
+                      margin: EdgeInsets.symmetric(horizontal: getWp(37.5)),
+                      height: getHp(45),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(getHp(100)),
-                          border: Border.all(width: 1,color: Colors.black),
+                          border: Border.all(width: 1,color: Color(0xff2D3339)),
                           color: Colors.white),
                       child: Center(
                         child: Padding(
@@ -69,8 +72,8 @@ class HomePage extends GetView<FictionSourceController> {
                               ),
                               Expanded(child: SizedBox()),
                               Icon(
-                                Icons.history_rounded,
-
+                                Icons.search,
+                                color: Colors.grey,
                               ),
                             ],
                           ),

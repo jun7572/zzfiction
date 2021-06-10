@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:hive/hive.dart';
@@ -8,9 +9,13 @@ class AppSettingUtil{
   static final String _readdingSetting="readdingSetting";
     static final String _fontHeight="_fontHeight";
     static final String _fontsize="_fontsize";
+    static final String _SearchHistory="_SearchHistory";
+    static final String _SearchHistory_content="_SearchHistory";
 
     //主题
     static  String _readMode="readTheme";
+
+
 
   static init()async{
     Directory directory = await getApplicationDocumentsDirectory();
@@ -22,12 +27,13 @@ class AppSettingUtil{
   //阅读界面的设置
   //字体大小啥的
 
-  static initReaddingSetting()async{
+  static Future initReaddingSetting()async{
     Box box = await Hive.openBox(_readdingSetting);
-    int height1=box.get(_fontHeight);
-    int fontsize1=box.get(_fontsize);
+    double height1=box.get(_fontHeight);
+    double fontsize1=box.get(_fontsize);
 
-  MeasureStringUtil.setTextSize(fontsize1??18, height1??1.8);
+    MeasureStringUtil.setTextSize(fontsize1??18, height1??1.8);
+
   }
 
   static Future<bool>  getReadTheme()async{
@@ -38,6 +44,24 @@ class AppSettingUtil{
     Box box = await Hive.openBox(_readdingSetting);
     box.put(_readMode,b);
 
+  }
+  static   setSearchHistory(List<String> list)async{
+    Box box = await Hive.openBox(_SearchHistory);
+    box.put(_SearchHistory_content,list);
+  }
+  static Future< List<String>>   getSearchHistory()async{
+    Box box = await Hive.openBox(_SearchHistory);
+    return box.get(_SearchHistory_content);
+  }
+
+
+  static Future<bool> setLineHeight(double sum)async{
+    Box box = await Hive.openBox(_readdingSetting);
+    box.put(_fontHeight,sum);
+  }
+  static Future<bool> setFontSize(double sum)async{
+    Box box = await Hive.openBox(_readdingSetting);
+    box.put(_fontsize,sum);
   }
 
 }

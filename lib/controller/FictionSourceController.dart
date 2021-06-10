@@ -10,10 +10,12 @@ class FictionSourceController extends SuperController<FictionSource>
   TextEditingController textEditingController = TextEditingController();
   final List<Tab> myTabs = [
     Tab(
+      iconMargin: EdgeInsets.all(0),
       text: "搜索",
       icon: new Icon(Icons.search_rounded),
     ),
     Tab(
+      iconMargin: EdgeInsets.all(0),
       text: "我的书库",
       icon: new Icon(Icons.list_alt_rounded),
     ),

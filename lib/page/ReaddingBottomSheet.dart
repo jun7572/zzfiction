@@ -6,6 +6,9 @@ import 'package:zzfiction/approute/AppRoutes.dart';
 import 'package:zzfiction/approute/PageName.dart';
 import 'package:zzfiction/controller/ReadController.dart';
 import 'package:zzfiction/repository/FictionRepository.dart';
+import 'package:zzfiction/utils/AppSettingUtil.dart';
+
+import 'BrightnessBottomSheet.dart';
 
 class ReaddingBottomSheet extends StatelessWidget {
   // double ii = 10;
@@ -79,14 +82,21 @@ class ReaddingBottomSheet extends StatelessWidget {
 
 
                         bottomButton(f:() async {
-                          Get.toNamed(AppPage.SetReaddingOptionPage);
+                          Get.back();
+                           Get.toNamed(AppPage.SetReaddingOptionPage).then((v)async{
+                             print("asdfasfasf");
+                           await  AppSettingUtil.initReaddingSetting();
+                             ctr.reloadText();
+                           });
+                          //  await  AppSettingUtil.initReaddingSetting();
+                          // ctr.reloadText();
                         },icon: Icons.settings,title: "设置"),
 
 
 
                         bottomButton(f:() async {
 
-                          Screen.setBrightness(0.5);
+                          Get.bottomSheet(BrightnessBottomSheet(),barrierColor: Colors.transparent);
                         },icon: Icons.brightness_5,title:"亮度"),
                       ],
                     ),

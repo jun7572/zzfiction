@@ -27,7 +27,11 @@ class MeasureStringUtil{
   static setTextSize(double fontSize,double fontHeight){
     _fontSize=fontSize;
     _fontHeight=fontHeight;
-
+    paragraphStyle=ParagraphStyle(
+      fontStyle: FontStyle.normal,
+      fontSize: _fontSize,
+      height: _fontHeight,
+    );
   }
   static Future<List<String>> calculatePageNUms(String string) async {
 

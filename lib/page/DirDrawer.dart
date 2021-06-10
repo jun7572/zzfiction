@@ -25,36 +25,50 @@ class DirDrawer extends GetView<ReadController> {
         builder: (ctr) {
 
           return Container(
-            width: Get.width-150,
+            width: getWp(290),
             color: Colors.black,
+            padding: EdgeInsets.fromLTRB(31.5, 24.5, 31.5, 47) ,
             // decoration: BoxDecoration(border: Border.symmetric(horizontal: BorderSide(width: 0.5,color: Colors.white,)),color: Colors.black ),
-            child:  ScrollablePositionedList.builder(
+            child:  Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(fr.currentFictionSource.title,style: TextStyle(color: Colors.white,fontSize: getSp(18)),),
+                SizedBox(height: getHp(38.5),),
+                Expanded(
+                  flex: 1,
+                  child: ScrollablePositionedList.builder(
 
-              itemCount: ctr.currentDir.length,
-              itemBuilder: (context, index) => GestureDetector(
-                onTap: (){
-                  ctr.dirClick(index);
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(border: Border.symmetric(horizontal: BorderSide(width: 0.5,color: Colors.white,)),color: Colors.black ),
-                  child: Text(
-                    ctr.currentDir[index].title,
+                    itemCount: ctr.currentDir.length,
+                    itemBuilder: (context, index) => GestureDetector(
+                      onTap: (){
+                        ctr.dirClick(index);
+                      },
+                      child: Container(
 
-                    style: TextStyle(
+                          height: getHp(43),
+                        alignment: AlignmentDirectional(-1,0),
+                        decoration: BoxDecoration(border: Border.symmetric(horizontal: BorderSide(width: 0.5,color: Color(0xff666666),)),color: Colors.black ),
+                        child: Text(
+                          ctr.currentDir[index].title,
+                          maxLines: 1,
+                          style: TextStyle(
 
-                      height: 2,
-                        fontSize: 15,
-                        color: fr.currentFictionSource
-                            .readdingChapter ==
-                            index
-                            ? Colors.blue
-                            : Colors.white),
+
+                              fontSize: getSp(12),
+
+                              color: fr.currentFictionSource
+                                  .readdingChapter ==
+                                  index
+                                  ? Colors.blue
+                                  : Colors.white),
+                        ),
+                      ),
+                    ),
+                    itemScrollController: ctr.itemScrollController,
+                    itemPositionsListener: ctr.itemPositionsListener,
                   ),
                 ),
-              ),
-              itemScrollController: ctr.itemScrollController,
-              itemPositionsListener: ctr.itemPositionsListener,
+              ],
             ),
 
             // child: ListView.builder(

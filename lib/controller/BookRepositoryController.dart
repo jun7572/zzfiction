@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:zzfiction/approute/PageName.dart';
+import 'package:zzfiction/db/DataBaseManager.dart';
 import 'package:zzfiction/repository/FictionRepository.dart';
 import 'package:zzfiction/utils/DialogUtil.dart';
 
@@ -15,6 +16,7 @@ class BookRepositoryController extends SuperController {
     DialogUtil.showLoading();
     var find = Get.find<FictionRepository>();
     await find.openLocalBook(index);
+
     DialogUtil.dismissLoading();
     Get.toNamed(AppPage.ReadPage);
   }

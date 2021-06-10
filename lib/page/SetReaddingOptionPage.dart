@@ -3,11 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:zzfiction/controller/ReadController.dart';
+import 'package:zzfiction/gen_a/A.dart';
+import 'package:zzfiction/utils/AppSettingUtil.dart';
 import 'package:zzfiction/utils/DialogUtil.dart';
 import 'package:zzfiction/utils/MeasureStringUtil.dart';
 
 class SetReaddingOptionPage extends GetView<ReadController> {
   final  String _stringss =
+      "  汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪,汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪.\n\n汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪.\n\n      汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪,汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪"
+      "  汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪,汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪.\n\n汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪.\n\n      汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪,汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪"
+      "  汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪,汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪.\n\n汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪.\n\n      汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪,汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪"
+      "  汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪,汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪.\n\n汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪.\n\n      汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪,汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪"
       "  汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪,汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪.\n\n汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪.\n\n      汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪,汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪"
       "  汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪,汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪.\n\n汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪.\n\n      汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪,汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪汪";
   double height =MeasureStringUtil.height;
@@ -18,6 +24,9 @@ class SetReaddingOptionPage extends GetView<ReadController> {
       initState: (State state){
 
       },
+
+
+
         init: controller,
         builder: (ctr) {
           return Scaffold(
@@ -29,11 +38,11 @@ class SetReaddingOptionPage extends GetView<ReadController> {
                       child: SingleChildScrollView(
                         child:  Container(
                           width: Get.width,
-                          color: Colors.black,
+                          color: Color(0xFFCCE8CF),
                           padding: EdgeInsets.all(17),
                           child:Text(_stringss,
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Colors.black,
                                 height:height,
                                 fontStyle: FontStyle.normal,
                                 fontSize: size,
@@ -42,30 +51,34 @@ class SetReaddingOptionPage extends GetView<ReadController> {
                         ),
 
                       )),
-                  Container(height: 200,
-
-                  child: Wrap(
+                  Container(height: 100,
+                    width: Get.width,
+                    color: Colors.black,
+                  child: Row(
                     children: [
-                      
+                      //todo
                       _settingButton((){
-                        MeasureStringUtil.setTextSize(size++, height);
-                       ctr.update();
-                     }, "Aa+"),
+                        // MeasureStringUtil.setTextSize(size++, height);
+                        AppSettingUtil.setFontSize(size++);
+                         ctr.update();
+                     }, A.assets_fontszeadd),
                       _settingButton((){
-                        MeasureStringUtil.setTextSize(size--, height);
+                        // MeasureStringUtil.setTextSize(size--, height);
+                        AppSettingUtil.setFontSize(size--);
                         ctr.update();
-                      }, "Aa-"),
+                      }, A.assets_fontsizeminus),
                       _settingButton((){
-                        MeasureStringUtil.setTextSize(size, height+=0.1);
+                        // MeasureStringUtil.setTextSize(size, height+=0.1);
+                        AppSettingUtil.setLineHeight(height+=0.1);
                         ctr.update();
-                      }, "行高+"),
+                      }, A.assets_lineheightadd),
                       _settingButton((){
-                        MeasureStringUtil.setTextSize(size, height-=0.1);
+                        // MeasureStringUtil.setTextSize(size, height-=0.1);
+                        AppSettingUtil.setLineHeight(height-=0.1);
                         ctr.update();
-                      }, "行高-"),
-                      _settingButton((){
-                            DialogUtil.showColorDialog();
-                      },'背景颜色'),
+                      }, A.assets_lineheightminus),
+
+
 
                     ],
                   ),),
@@ -78,11 +91,15 @@ class SetReaddingOptionPage extends GetView<ReadController> {
   }
 }
 Widget _settingButton(Function f,String s){
-  return  ElevatedButton(onPressed:f,
-    style: ElevatedButton.styleFrom(shape:CircleBorder(),primary: Colors.grey),
-    child: Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Text(s,style: TextStyle(color: Colors.black),),
+  return  Expanded(
+    flex: 1,
+    child: ElevatedButton(onPressed:f,
+
+      style: ElevatedButton.styleFrom(shape:CircleBorder(),primary: Colors.black),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Image.asset(s),
+      ),
     ),
   );
 }

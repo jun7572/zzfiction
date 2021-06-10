@@ -29,6 +29,7 @@ class DataBaseManager {
     _database= await openDatabase(dbpath,onCreate: createTable,version: 1);
 
      isInit=true;
+
      //初始化一个实体类列表,创建表
   }
   // "DROP TABLE IF EXISTS dub_draft",
@@ -39,7 +40,7 @@ class DataBaseManager {
   //     String content;
   Future  createTable(Database db, int newVersion)async{
     //BLOB  Uint8List
-    String str='CREATE TABLE $table (fiction_id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, path TEXT,host TEXT,scheme TEXT,restful TEXT,charset TEXT,readdingChapter INTEGER,usePathIndex INTEGER)';
+    String str='CREATE TABLE $table (fiction_id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, path TEXT,host TEXT,scheme TEXT,restful TEXT,charset TEXT,readdingChapter INTEGER,usePathIndex INTEGER,lastUseTime INTEGER)';
     String str1='CREATE TABLE $tableChapter (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, path TEXT,absPath TEXT,absPath2 TEXT,content TEXT,fictionId INTEGER)';
     // String str='create table Test (id INTEGER PRIMARY KEY, name TEXT, value INTEGER)';
     // String ste='DROP TABLE IF EXISTS $table';
@@ -87,7 +88,7 @@ class DataBaseManager {
 
   // //[ASC | DESC]; 排序
   Future<List<Map<String,dynamic>>> queryAllLocalFiction()async{
-    Future<List<Map<String,dynamic>>>  f=_database.query(table);
+    Future<List<Map<String,dynamic>>>  f=_database.query(table,orderBy: "lastUseTime DESC");
     return f;
   }
   //查询所有的章节
@@ -99,6 +100,7 @@ class DataBaseManager {
 
        list1.add(FictionChapter.fromJson(element));
      });
+
      return list1;
 
 
@@ -122,6 +124,9 @@ class DataBaseManager {
    await _database.delete(table,where: 'fiction_id=?',whereArgs: [fictionSource.id]);
 
 
+ }
+ updateFictionLastTime(FictionSource fictionSource){
+   _database.update(table,fictionSource.toJson(),where: 'fiction_id=?',whereArgs: [fictionSource.id]);
  }
 
 

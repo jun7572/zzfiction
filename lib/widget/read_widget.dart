@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:zzfiction/controller/ReadController.dart';
 import 'package:zzfiction/db/DataBaseManager.dart';
 import 'package:zzfiction/page/DirDrawer.dart';
+import 'package:zzfiction/page/ReaddingBottomSheet.dart';
 
 import 'package:zzfiction/repository/FictionRepository.dart';
 import 'package:zzfiction/utils/MeasureStringUtil.dart';
@@ -27,12 +28,7 @@ class ReadWidget2 extends StatefulWidget {
 class ReadWidgetState2 extends State<ReadWidget2> {
 
   ReadController controller = Get.find<ReadController>();
-  @override
-  void initState() {
-    controller.calculatePageNUms();
 
-
-  }
 
   @override
   void dispose() {
@@ -47,12 +43,13 @@ class ReadWidgetState2 extends State<ReadWidget2> {
 
     return Scaffold(
       key: controller.gk,
-
+      // bottomSheet: ReaddingBottomSheet(),
       drawerEnableOpenDragGesture: false,
       floatingActionButton: controller.isShowFloatButton()
           ? FloatingActionButton(
               onPressed: () {
                 controller.addOneBook();
+
               },
               backgroundColor: Theme.of(context).primaryColor,
               child: Center(
@@ -88,6 +85,11 @@ class ReadWidgetState2 extends State<ReadWidget2> {
                   onNotification:ctr.lastPageLoadMore,
                   child: GestureDetector(
                     onTapDown: ctr.centerlickEvent,
+                    // onTapDown: (t){
+                    //   showBottomSheet(backgroundColor: Colors.red,context: context, builder: (_){
+                    //     return ReaddingBottomSheet();
+                    //   });
+                    // },
                     child: PageView.builder(
 
                         controller: ctr.pc,

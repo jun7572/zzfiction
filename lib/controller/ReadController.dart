@@ -1,3 +1,4 @@
+
 import 'dart:ui' as ui;
 import 'dart:ui';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get/get.dart';
 import 'package:native_progress_hud/native_progress_hud.dart';
+import 'package:screen/screen.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:zzfiction/SearchEngine.dart';
 import 'package:zzfiction/approute/PageName.dart';
@@ -28,6 +30,25 @@ class ReadController extends SuperController {
 
   Color backgrandColor_dark=Colors.black;
   Color fontColor_dark=Colors.white;
+
+  double  brightnessValue=0;
+  bool brightnessFollowSystem=false;
+  brightnessChange(i){
+    brightnessFollowSystem=false;
+    Screen.setBrightness(i);
+    brightnessValue=i;
+    update(["BrightnessBottomSheet"]);
+  }
+  changeBrightFollow(b){
+    brightnessFollowSystem=b;
+    if(brightnessFollowSystem){
+      Screen.setBrightness(-1);
+    }
+
+    update(["BrightnessBottomSheet"]);
+  }
+
+
   Color getBackgrandColor(){
   return mode?backgrandColor_light:backgrandColor_dark;
 }
@@ -42,15 +63,19 @@ class ReadController extends SuperController {
     }
     return true;
   }
-
+  //如果使用了这个的话就不应该在stateful进行初始化,不利于代码管理
   @override
   void onReady() {
     getCurrentDirs();
     initTheme();
+    calculatePageNUms();
   }
   initTheme()async{
     var b = await AppSettingUtil.getReadTheme();
     mode=b??true;
+   // double  brightness=await Screen.brightness;
+
+    // brightnessValue=brightness;
     update();
   }
 
@@ -77,7 +102,17 @@ class ReadController extends SuperController {
     FictionRepository fs = Get.find<FictionRepository>();
     FictionSource openSourceToGetDirs =await SearchEngine().openSourceToGetDirs(fs.currentFictionSource);
     var list = await DataBaseManager().updateFiction(openSourceToGetDirs);
-    DialogUtil.showToast("更新了${list.length}章");
+
+      if(list!=null){
+        await fs.queryAllLocalBook();
+        currentDir = fs.currentFictionSource.chapters;
+        DialogUtil.showToast("更新了${list.length}章");
+        update();
+      }else{
+        DialogUtil.showToast("没得更新");
+      }
+
+
     DialogUtil.dismissLoading();
   }
 
@@ -92,7 +127,9 @@ class ReadController extends SuperController {
     if ((e.globalPosition.dx > left && e.globalPosition.dx < right) &&
         (e.globalPosition.dy < bottom && e.globalPosition.dy > top)) {
       // gk.currentState.openDrawer();
-     Get.bottomSheet(ReaddingBottomSheet());
+     Get.bottomSheet(ReaddingBottomSheet(),barrierColor: Colors.transparent);
+
+
     }
 
   }
@@ -114,6 +151,14 @@ class ReadController extends SuperController {
 
     update();
     Get.back();
+  }
+    //点击了修改行高之类的之后要重新计算高度
+  reloadText()async{
+    DialogUtil.showLoading();
+    list.clear();
+    await calculatePageNUms();
+    DialogUtil.dismissLoading();
+    update();
   }
 
   List<FictionChapter> currentDir = [];
@@ -142,7 +187,7 @@ class ReadController extends SuperController {
     List<String> listr22 =[];
 
     if(fs.currentFictionChapter.content==null){
-      await loadNextChapter( index:fs.currentFictionSource.readdingChapter);
+      await loadChapter( index:fs.currentFictionSource.readdingChapter);
     }else{
       listr22=  await MeasureStringUtil.calculatePageNUms(
           fs.currentFictionChapter.content);
@@ -161,7 +206,7 @@ class ReadController extends SuperController {
 
   //加载下一章//加载啥内容?
   // 没参数就下一章,有参数就加载参数的那章
-  loadNextChapter({int index}) async {
+  loadChapter({int index}) async {
     DialogUtil.showLoading();
     FictionRepository fs = Get.find<FictionRepository>();
 
@@ -234,7 +279,7 @@ class ReadController extends SuperController {
         (pc.page.ceil() + 1 == list.length)) {
       print('加载下一章');
      try{
-       loadNextChapter();
+       loadChapter();
      }catch(e){
 
      }
@@ -248,6 +293,7 @@ class ReadController extends SuperController {
 
   addOneBook() async {
     FictionRepository fs = Get.find<FictionRepository>();
+    fs.currentFictionSource.lastUseTime=DateTime.now().millisecondsSinceEpoch;
     await DataBaseManager().insertOneFiction(fs.currentFictionSource);
     await fs.queryAllLocalBook();
     update();

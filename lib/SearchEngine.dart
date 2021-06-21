@@ -479,7 +479,7 @@ class _MyTextVisitor extends TreeVisitor {
       if(node.data.endsWith("\n")){
         _str.write(node.data);
       }else{
-        _str.write("       "+node.data+"\n\n");
+        _str.write("       "+node.data+"\n");
       }
 
 

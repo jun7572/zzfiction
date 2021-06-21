@@ -40,7 +40,7 @@ class DataBaseManager {
   //     String content;
   Future  createTable(Database db, int newVersion)async{
     //BLOB  Uint8List
-    String str='CREATE TABLE $table (fiction_id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, path TEXT,host TEXT,scheme TEXT,restful TEXT,charset TEXT,readdingChapter INTEGER,usePathIndex INTEGER,lastUseTime INTEGER)';
+    String str='CREATE TABLE $table (fiction_id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, path TEXT,host TEXT,scheme TEXT,restful TEXT,charset TEXT,readdingChapter INTEGER,usePathIndex INTEGER,lastUseTime INTEGER,pageNum INTEGER)';
     String str1='CREATE TABLE $tableChapter (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, path TEXT,absPath TEXT,absPath2 TEXT,content TEXT,fictionId INTEGER)';
     // String str='create table Test (id INTEGER PRIMARY KEY, name TEXT, value INTEGER)';
     // String ste='DROP TABLE IF EXISTS $table';

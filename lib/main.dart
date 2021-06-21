@@ -20,14 +20,14 @@ import 'managers/screen_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // if (Platform.isAndroid) {
-  //   SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor: Colors.transparent);
-  //
-  //   SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
-  //   // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
-  //
-  //
-  // }
+  if (Platform.isAndroid) {
+    SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+
+    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+    // SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
+
+
+  }
   ErrorWidget.builder = (errorDetails) {
     return Builder(builder: (ctx) {
       return Scaffold(

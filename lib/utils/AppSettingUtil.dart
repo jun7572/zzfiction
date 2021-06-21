@@ -32,7 +32,7 @@ class AppSettingUtil{
     double height1=box.get(_fontHeight);
     double fontsize1=box.get(_fontsize);
 
-    MeasureStringUtil.setTextSize(fontsize1??18, height1??1.8);
+    MeasureStringUtil.setTextSize(fontsize1??23, height1??2.0);
 
   }
 
@@ -63,5 +63,18 @@ class AppSettingUtil{
     Box box = await Hive.openBox(_readdingSetting);
     box.put(_fontsize,sum);
   }
+  //PageNum
+   static final String _BrightnessColor="BrightnessColor";
+  //保存当前章节的页数
+  static  setBrightnessColor(int sum)async{
+    Box box = await Hive.openBox(_readdingSetting);
+    box.put(_BrightnessColor,sum);
+  }
+  static Future<int> getBrightnessColor()async{
+    Box box = await Hive.openBox(_readdingSetting);
+    return box.get(_BrightnessColor)??0xFFCCE8CF;
+  }
+
+
 
 }

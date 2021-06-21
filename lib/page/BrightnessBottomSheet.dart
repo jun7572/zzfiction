@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zzfiction/controller/ReadController.dart';
+import 'package:zzfiction/utils/AppSettingUtil.dart';
 
 class BrightnessBottomSheet extends GetView<ReadController>{
   @override
@@ -49,11 +50,12 @@ class BrightnessBottomSheet extends GetView<ReadController>{
 
                 Row(
                   children: [
-                    colorButton(c:Color(0xffEEEEEE),f: (){} ),
-                    colorButton(c:Color(0xffDCEDDB),f: (){} ),
-                    colorButton(c:Color(0xffE1D3CA),f: (){} ),
-                    colorButton(c:Color(0xffF2EADF),f: (){} ),
-                    colorButton(c:Color(0xffF8E5E9),f: (){} ),
+                    colorButton(c:Color(0xffEEEEEE),color: 0xffEEEEEE ),
+                    colorButton(c:Color(0xffDCEDDB), color: 0xffDCEDDB),
+                    colorButton(c:Color(0xffE1D3CA), color: 0xffE1D3CA),
+                    colorButton(c:Color(0xffF2EADF), color: 0xffF2EADF),
+                    colorButton(c:Color(0xffF8E5E9), color: 0xffF8E5E9),
+                    colorButton(c:Color(0xFFCCE8CF), color: 0xFFCCE8CF),
                   ],
                 ),
                 SizedBox(height: 10,),
@@ -65,7 +67,11 @@ class BrightnessBottomSheet extends GetView<ReadController>{
       );
  });
   }
-   Widget colorButton({Function f,Color c}){
-    return  ElevatedButton(onPressed: f, child: Container(width: 30,height: 30,),style: ElevatedButton.styleFrom(shape: CircleBorder(),primary: c,));
+   Widget colorButton({Color c,int color}){
+    return  ElevatedButton(onPressed: (){
+      AppSettingUtil.setBrightnessColor(color);
+      controller.backgrandColor_light=Color(color);
+      controller.update();
+      }, child: Container(width: 30,height: 30,),style: ElevatedButton.styleFrom(shape: CircleBorder(),primary: c,));
     }
 }

@@ -20,7 +20,11 @@ def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
-
+def versionPropertiesFile = rootProject.file("version.properties")
+def versionProperties = new Properties()
+versionProperties.load(new FileInputStream(versionPropertiesFile))
+def versionName_load=versionProperties['bigVersion']+"."+versionProperties['midVersion']+"."+versionProperties['smallVersion']
+def versioncode_load=versionProperties.getProperty('midVersion')
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
@@ -38,18 +42,29 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.zzfiction"
+        applicationId "com.june.zzfiction"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        versionCode versioncode_load.toInteger()
+        versionName versionName_load
+    }
+    signingConfigs {
+        release {
+            v1SigningEnabled true
+            v2SigningEnabled true
+            storeFile file("/Users/jiajunzhou/Documents/我的证件信息/zjjkey")
+            storePassword "8897572"
+            keyAlias "nujaijouhz123456"
+            keyPassword "8897572"
+        }
     }
 
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
+
         }
     }
 }

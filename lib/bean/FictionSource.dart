@@ -23,6 +23,7 @@ class FictionSource with ChangeNotifier,DiagnosticableTreeMixin{
   // 0是在初始化的时候使用,1是使用path1 2是使用path2
   int usePathIndex=0;
   int lastUseTime=0;
+  int pageNum=0;
   FictionSource({this.path,this.title});
 
   setChapters( List<FictionChapter> chapters){
@@ -53,6 +54,7 @@ class FictionSource with ChangeNotifier,DiagnosticableTreeMixin{
     id = json['fiction_id'];
     usePathIndex = json['usePathIndex'];
     lastUseTime = json['lastUseTime'];
+    pageNum = json['pageNum'];
 
   }
   // String str='CREATE TABLE $table (fiction_id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, path TEXT,host TEXT,index INTEGER,restful BLOB,charset TEXT,readdingChapter INTEGER)';
@@ -68,6 +70,7 @@ class FictionSource with ChangeNotifier,DiagnosticableTreeMixin{
     data['usePathIndex'] = this.usePathIndex;
     data['readdingChapter'] = this.readdingChapter;
     data['lastUseTime'] = this.lastUseTime;
+    data['pageNum'] = this.pageNum;
     data['restful'] = this.restful.toString();
 
     return data;

@@ -16,61 +16,46 @@ import 'package:zzfiction/repository/FictionRepository.dart';
 import 'package:zzfiction/utils/MeasureStringUtil.dart';
 import 'package:zzfiction/utils/PreloadManager.dart';
 
-class ReadWidget2 extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return ReadWidgetState2();
-  }
-}
+
 
 //扔一个String  处理成List<String>
-class ReadWidgetState2 extends State<ReadWidget2> {
-
-  ReadController controller = Get.find<ReadController>();
+class ReadWidget2 extends StatelessWidget{
 
 
-  @override
-  void dispose() {
-    super.dispose();
 
-    controller.list.clear();
 
-  }
-  int iii=0;
+
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      key: controller.gk,
-      // bottomSheet: ReaddingBottomSheet(),
-      drawerEnableOpenDragGesture: false,
-      floatingActionButton: controller.isShowFloatButton()
-          ? FloatingActionButton(
-              onPressed: () {
-                controller.addOneBook();
+    return GetBuilder<ReadController>(
+      builder: (ctr){
+        return Scaffold(
+          key: ctr.gk,
+          // bottomSheet: ReaddingBottomSheet(),
+          drawerEnableOpenDragGesture: false,
+          floatingActionButton: ctr.isShowFloatButton()
+              ? FloatingActionButton(
+            onPressed: () {
+              ctr.addOneBook();
 
-              },
-              backgroundColor: Theme.of(context).primaryColor,
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "添加本地书库",
-                    style: TextStyle(color: Colors.black,fontSize: 10),
-                  ),
+            },
+            backgroundColor: Theme.of(context).primaryColor,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "添加本地书库",
+                  style: TextStyle(color: Colors.black,fontSize: 10),
                 ),
               ),
-            )
-          : null,
-      drawer: DirDrawer(),
+            ),
+          )
+              : null,
+          drawer: DirDrawer(),
 
 
-      body: GetBuilder<ReadController>(
-        init: controller,
-        builder: (ctr) {
-
-          return Stack(
+          body: Stack(
             children: [
               Container(
                 width: Get.width,
@@ -158,9 +143,9 @@ class ReadWidgetState2 extends State<ReadWidget2> {
               // }, child: Text("asdfasfafda")),
 
             ],
-          );
-        },
-      ),
+          ),
+        );
+      }
     );
   }
 }

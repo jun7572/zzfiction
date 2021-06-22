@@ -4,7 +4,7 @@ import 'dart:isolate';
 import 'package:get/get.dart';
 import 'package:zzfiction/SearchEngine.dart';
 import 'package:zzfiction/repository/FictionRepository.dart';
-//todo 写到一半接着写
+///预加载管理者
 class PreloadManager{
 
 

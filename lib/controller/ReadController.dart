@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get/get.dart';
@@ -23,7 +24,7 @@ class ReadController extends SuperController {
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
-  //todo 临时放这,现实功能先  0是light 1是dark
+  /// 临时放这,现实功能先  0是light 1是dark
   bool mode = true;
   //PageController
   final PageController pc = PageController(initialPage: 0);
@@ -86,6 +87,7 @@ class ReadController extends SuperController {
     initPage();
   }
 
+
   initPage() async {
     await calculatePageNUms();
 
@@ -101,9 +103,12 @@ class ReadController extends SuperController {
     var i = await AppSettingUtil.getBrightnessColor();
     backgrandColor_light = Color(i);
     mode = b ?? true;
-    // double  brightness=await Screen.brightness;
+    if(mode){
+      setLightMode();
+    }else{
+      setDarkMode();
+    }
 
-    // brightnessValue=brightness;
     update();
   }
 
@@ -198,7 +203,10 @@ class ReadController extends SuperController {
 
   FictionChapter currentChapter;
   @override
-  void onDetached() {}
+  void onDetached() {
+    setDarkMode();
+
+  }
 
   @override
   void onInactive() {}
@@ -330,7 +338,23 @@ class ReadController extends SuperController {
 
   bottomSheetClick() {
     mode = !mode;
+    if(mode){
+      setLightMode();
+    }else{
+      setDarkMode();
+    }
     AppSettingUtil.setReadTheme(mode);
     update();
+  }
+
+  setDarkMode(){
+    SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light);
+
+    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+  }
+  setLightMode(){
+    SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarIconBrightness: Brightness.dark);
+
+    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
 }

@@ -20,11 +20,6 @@ import 'package:zzfiction/utils/PreloadManager.dart';
 
 //扔一个String  处理成List<String>
 class ReadWidget2 extends StatelessWidget{
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
 
@@ -123,9 +118,6 @@ class ReadWidget2 extends StatelessWidget{
                                   ),
                                   // clipBehavior: Clip.hardEdge,
                                 ),
-
-
-
 
                               ],
                             ),

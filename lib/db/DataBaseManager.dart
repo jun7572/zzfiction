@@ -52,7 +52,7 @@ class DataBaseManager {
     batch.execute(str1);
     batch.commit();
   }
-  //插入一本小说
+  ///插入一本小说
   Future  insertOneFiction(FictionSource fictionSource)async{
     //成功插入返回当前行的id
     Map<String, Object> map=fictionSource.toJson();
@@ -66,8 +66,8 @@ class DataBaseManager {
 
     return batch.commit();
   }
-  //把新的章节差入数据库
-  // 传入一个更新list后的FictionSource
+  ///把新的章节差入数据库
+  /// 传入一个更新list后的FictionSource
   Future<List<Object>> updateFiction(FictionSource fictionSource)async{
     List<FictionChapter> list=  await queryChapters(fictionSource.id);
     List<FictionChapter> newList=[];
@@ -91,7 +91,7 @@ class DataBaseManager {
     Future<List<Map<String,dynamic>>>  f=_database.query(table,orderBy: "lastUseTime DESC");
     return f;
   }
-  //查询所有的章节
+  ///查询所有的章节
   Future<List<FictionChapter>> queryChapters(int id)async{
     // _database.query(table,where:'str=?',whereArgs: [str]);
      List<Map<String, Object>> list= await _database.query(tableChapter,where:'fictionId=?',whereArgs: [id]);
@@ -105,7 +105,7 @@ class DataBaseManager {
 
 
   }
-  //插入一章的内容,当前的那章??
+  ///插入一章的内容,当前的那章??
   updateOneChapterContent(FictionChapter fictionChapter){
     PrintUtil.prints("跟新一章的内容");
         //todo
@@ -114,7 +114,7 @@ class DataBaseManager {
     _database.update(tableChapter,fictionChapter.toJson(),where: 'id=?',whereArgs: [fictionChapter.id]);
 
   }
-  //插入一章的内容,当前的那章??
+  ///插入一章的内容,当前的那章??
   updateOneFiction(FictionSource fictionSource){
 
     _database.update(table,fictionSource.toJson(),where: 'fiction_id=?',whereArgs: [fictionSource.id]);

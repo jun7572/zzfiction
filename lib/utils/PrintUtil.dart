@@ -1,7 +1,7 @@
-class PrintUtil{
-  static bool b=true;
+class LogUtil{
+  static bool _b=true;
  static prints(String s){
-    if(b){
+    if(_b){
       print(s);
     }
   }

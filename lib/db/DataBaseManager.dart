@@ -23,7 +23,7 @@ class DataBaseManager {
   init()async{
     // /data/user/0/yueyu.june.jun.yueyu/databases
     String path=await getDatabasesPath();
-    PrintUtil.prints("path==="+path);
+    LogUtil.prints("path==="+path);
 
     var dbpath = join(path,dataName);
     _database= await openDatabase(dbpath,onCreate: createTable,version: 1);
@@ -57,7 +57,7 @@ class DataBaseManager {
     //成功插入返回当前行的id
     Map<String, Object> map=fictionSource.toJson();
    var id = await _database.insert(table, map);
-    PrintUtil.prints("插入书籍id为=="+id.toString());
+    LogUtil.prints("插入书籍id为=="+id.toString());
     Batch batch = _database.batch();
     for(int i=0; i<fictionSource.chapters.length;i++){
       fictionSource.chapters[i].fictionId=id;
@@ -75,7 +75,7 @@ class DataBaseManager {
     if(fictionSource.chapters.length>list.length){
       Batch batch = _database.batch();
       for(int i=list.length;i<fictionSource.chapters.length;i++){
-        PrintUtil.prints('插入${fictionSource.chapters[i].toJson()}');
+        LogUtil.prints('插入${fictionSource.chapters[i].toJson()}');
         batch.insert(tableChapter,  fictionSource.chapters[i].toJson());
       }
     return batch.commit();
@@ -107,7 +107,7 @@ class DataBaseManager {
   }
   ///插入一章的内容,当前的那章??
   updateOneChapterContent(FictionChapter fictionChapter){
-    PrintUtil.prints("跟新一章的内容");
+    LogUtil.prints("跟新一章的内容");
         //todo
       // String strsql='UPDATE $tableChapter  SET content = ?, [${fictionChapter.content}])';
     // _database.rawUpdate( );

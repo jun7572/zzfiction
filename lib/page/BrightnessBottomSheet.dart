@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zzfiction/controller/ReadController.dart';
 import 'package:zzfiction/utils/AppSettingUtil.dart';
-
+///亮度设置的BottomSheet
 class BrightnessBottomSheet extends GetView<ReadController>{
   @override
   Widget build(BuildContext context) {

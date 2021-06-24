@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:zzfiction/approute/AppRoutes.dart';
 import 'package:zzfiction/approute/PageName.dart';
 import 'package:zzfiction/controller/ReadController.dart';
+import 'package:zzfiction/gen_a/A.dart';
+import 'package:zzfiction/managers/screen_manager.dart';
 import 'package:zzfiction/repository/FictionRepository.dart';
 import 'package:zzfiction/utils/AppSettingUtil.dart';
 
@@ -32,25 +34,16 @@ class ReaddingBottomSheet extends GetView<ReadController> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   ElevatedButton(
+
                     onPressed: ctr.bottomSheetClick,
                     style: ElevatedButton.styleFrom(
                         primary: !ctr.mode ? Colors.white : Colors.blue,
                         shape: CircleBorder(),
+                        padding: EdgeInsets.zero,
                         onSurface: Colors.blue),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: !ctr.mode
-                          ? Icon(
-                              Icons.wb_sunny,
-                              color: Colors.amberAccent,
-                              size: 35,
-                            )
-                          : Icon(
-                              Icons.nightlight_round,
-                              color: Colors.white,
-                              size: 35,
-                            ),
-                    ),
+                    child: !ctr.mode
+                        ? Image.asset(A.assets_ri,width: getWp(44),height: getWp(44),fit:BoxFit.fill,)
+                        : Image.asset(A.assets_ye,width: getWp(44),height: getWp(44),fit:BoxFit.fill),
                   ),
                 ],
               ),
@@ -59,7 +52,7 @@ class ReaddingBottomSheet extends GetView<ReadController> {
               ),
 
               Container(
-                color: Colors.black54,
+                color: Colors.black,
                 child: Column(
                   children: [
                     Row(
@@ -88,17 +81,18 @@ class ReaddingBottomSheet extends GetView<ReadController> {
                       children: [
                         bottomButton(
                             f: () async {
-                              ctr.refreshFiction();
-                            },
-                            icon: Icons.refresh_rounded,
-                            title: "刷新"),
-                        bottomButton(
-                            f: () async {
                               ctr.gk.currentState.openDrawer();
                               Get.back();
                             },
                             icon: Icons.list_rounded,
                             title: "目录"),
+                        bottomButton(
+                            f: () async {
+                              ctr.refreshFiction();
+                            },
+                            icon: Icons.refresh_rounded,
+                            title: "刷新"),
+
                         bottomButton(
                             f: () async {
                               Get.back();

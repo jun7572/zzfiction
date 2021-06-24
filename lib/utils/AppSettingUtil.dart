@@ -24,8 +24,8 @@ class AppSettingUtil{
 
   }
 
-  //阅读界面的设置
-  //字体大小啥的
+  ///阅读界面的设置
+  ///字体大小啥的
 
   static Future initReaddingSetting()async{
     Box box = await Hive.openBox(_readdingSetting);
@@ -36,6 +36,7 @@ class AppSettingUtil{
 
   }
 
+  ///获取是哪个模式，白天和黑夜
   static Future<bool>  getReadTheme()async{
     Box box = await Hive.openBox(_readdingSetting);
    return box.get(_readMode);

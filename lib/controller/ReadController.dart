@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get/get.dart';
@@ -17,13 +18,15 @@ import 'package:zzfiction/repository/FictionRepository.dart';
 import 'package:zzfiction/utils/AppSettingUtil.dart';
 import 'package:zzfiction/utils/DialogUtil.dart';
 import 'package:zzfiction/utils/MeasureStringUtil.dart';
+import 'package:zzfiction/utils/PreloadManager.dart';
+import 'package:zzfiction/utils/PrintUtil.dart';
 
 class ReadController extends SuperController {
   GlobalKey<ScaffoldState> gk = GlobalKey<ScaffoldState>();
   final ItemScrollController itemScrollController = ItemScrollController();
   final ItemPositionsListener itemPositionsListener =
       ItemPositionsListener.create();
-  //todo 临时放这,现实功能先  0是light 1是dark
+  /// 临时放这,现实功能先  0是light 1是dark
   bool mode = true;
   //PageController
   final PageController pc = PageController(initialPage: 0);
@@ -86,12 +89,13 @@ class ReadController extends SuperController {
     initPage();
   }
 
+  ///计算进来的时候加载的章节
   initPage() async {
     await calculatePageNUms();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       FictionRepository fss = Get.find<FictionRepository>();
-
+      LogUtil.prints("跳转至--->${fss.currentFictionSource.pageNum }");
       pc.jumpToPage(fss.currentFictionSource.pageNum ?? 0);
     });
   }
@@ -101,9 +105,12 @@ class ReadController extends SuperController {
     var i = await AppSettingUtil.getBrightnessColor();
     backgrandColor_light = Color(i);
     mode = b ?? true;
-    // double  brightness=await Screen.brightness;
+    if(mode){
+      setLightMode();
+    }else{
+      setDarkMode();
+    }
 
-    // brightnessValue=brightness;
     update();
   }
 
@@ -148,7 +155,7 @@ class ReadController extends SuperController {
   int index11 = 0;
   //屏幕居中点击事件
   centerlickEvent(TapDownDetails e) async {
-    int length = 80;
+    int length = 60;
     double left = Get.width / 2 - length;
     double right = Get.width / 2 + length;
     double top = Get.height / 2 - length;
@@ -175,6 +182,7 @@ class ReadController extends SuperController {
     list.clear();
     try {
       await calculatePageNUms();
+      await updateChapterPageNum(0);
     } catch (e) {
       DialogUtil.showToast("无数据");
       Get.back();
@@ -198,7 +206,10 @@ class ReadController extends SuperController {
 
   FictionChapter currentChapter;
   @override
-  void onDetached() {}
+  void onDetached() {
+    setDarkMode();
+
+  }
 
   @override
   void onInactive() {}
@@ -211,10 +222,10 @@ class ReadController extends SuperController {
 
   double padding = 17;
 
-  //这个是总共的,单章的数据我看看啊
+  //这个是总共的
   List<FictionChapterStr> list = [];
 
-  //分割计算content内容
+  ///分割计算content内容,每次计算都会加入list里面
   calculatePageNUms() async {
     FictionRepository fs = Get.find<FictionRepository>();
     List<String> listr22 = [];
@@ -236,8 +247,8 @@ class ReadController extends SuperController {
     update();
   }
 
-  //加载下一章//加载啥内容?
-  // 没参数就下一章,有参数就加载参数的那章
+  ///加载下一章,//每次加载就发一次10章后的预加载信号
+  /// 没参数就下一章,有参数就加载参数的那章
   loadChapter({int index}) async {
     DialogUtil.showLoading();
     FictionRepository fs = Get.find<FictionRepository>();
@@ -261,14 +272,16 @@ class ReadController extends SuperController {
     if (fs.currentFictionChapter.content == null ||
         fs.currentFictionChapter.content.isEmpty ||
         SearchEngine.noData == fs.currentFictionChapter.content) {
+      //网络获取
       String singleChapterContent = await SearchEngine()
           .getSingleChapterContent(
               fs.currentFictionSource, fs.currentFictionSource.readdingChapter);
 
       fs.currentFictionChapter.content = singleChapterContent;
+      //更新本地
       await DataBaseManager().updateOneChapterContent(fs.currentFictionChapter);
     }
-
+    //计算展示的所需空间
     List<String> listr22 = await MeasureStringUtil.calculatePageNUms(
         fs.currentFictionChapter.content);
     // fs.currentFictionChapter.listStr=listr22;
@@ -282,22 +295,29 @@ class ReadController extends SuperController {
     //更新小说当前章节
     await DataBaseManager().updateOneFiction(fs.currentFictionSource);
     DialogUtil.dismissLoading();
+    //预加载相关
+    PreloadManager().load(fs.currentFictionSource.readdingChapter);
 
     update();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       await pc.nextPage(
           duration: Duration(milliseconds: 200), curve: Curves.linear);
-      FictionRepository fss = Get.find<FictionRepository>();
-      fss.currentFictionSource.pageNum = 0;
-      await DataBaseManager().updateOneFiction(fss.currentFictionSource);
+
+      //把当面页数设置为0
+      updateChapterPageNum(0);
     });
   }
-
+  ///更新当前章节的页码
+  updateChapterPageNum(int num)async{
+    FictionRepository fss = Get.find<FictionRepository>();
+    fss.currentFictionSource.pageNum = num;
+    await DataBaseManager().updateOneFiction(fss.currentFictionSource);
+  }
   loadPreChapter() {}
 
   onPageViewChange(page) async {
     FictionRepository fss = Get.find<FictionRepository>();
-    fss.currentFictionSource.pageNum = page;
+    fss.currentFictionSource.pageNum = list[page].index;
     await DataBaseManager().updateOneFiction(fss.currentFictionSource);
   }
 
@@ -330,7 +350,23 @@ class ReadController extends SuperController {
 
   bottomSheetClick() {
     mode = !mode;
+    if(mode){
+      setLightMode();
+    }else{
+      setDarkMode();
+    }
     AppSettingUtil.setReadTheme(mode);
     update();
+  }
+
+  setDarkMode(){
+    SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarIconBrightness: Brightness.light);
+
+    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+  }
+  setLightMode(){
+    SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarIconBrightness: Brightness.dark);
+
+    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
 }

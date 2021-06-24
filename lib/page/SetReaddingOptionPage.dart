@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
 
@@ -24,9 +27,6 @@ class SetReaddingOptionPage extends GetView<ReadController> {
       initState: (State state){
 
       },
-
-
-
         init: controller,
         builder: (ctr) {
           return Scaffold(
@@ -71,12 +71,12 @@ class SetReaddingOptionPage extends GetView<ReadController> {
                         // MeasureStringUtil.setTextSize(size, height+=0.1);
                         AppSettingUtil.setLineHeight(height+=0.1);
                         ctr.update();
-                      }, A.assets_lineheightadd),
+                      }, A.assets_lineheightminus),
                       _settingButton((){
                         // MeasureStringUtil.setTextSize(size, height-=0.1);
                         AppSettingUtil.setLineHeight(height-=0.1);
                         ctr.update();
-                      }, A.assets_lineheightminus),
+                      }, A.assets_lineheightadd),
 
 
 

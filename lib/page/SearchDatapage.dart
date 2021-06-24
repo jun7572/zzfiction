@@ -7,6 +7,7 @@ import 'package:native_progress_hud/native_progress_hud.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:zzfiction/approute/PageName.dart';
 import 'package:zzfiction/controller/SearchController.dart';
+import 'package:zzfiction/managers/screen_manager.dart';
 import 'package:zzfiction/repository/FictionRepository.dart';
 import 'package:zzfiction/utils/DialogUtil.dart';
 
@@ -20,7 +21,7 @@ class SearchDatapage extends GetView<SearchController>{
 
     return Scaffold(
 
-      appBar: AppBar(),
+      appBar: AppBar(backgroundColor: Colors.white,title: Text("搜索结果"),),
       body: GetBuilder<SearchController>(
         init: controller,
        dispose: (s){
@@ -64,17 +65,23 @@ class SearchDatapage extends GetView<SearchController>{
 
                itemCount: controller.fss.length,
                itemBuilder:  (_,index){
-                 return TextButton(
+                 return GestureDetector(
 
-                   child: Card(
-                     child: Padding(padding: EdgeInsets.all(10),child: Column(
-                       children: [
-                         Text( controller.fss[index].title),
+                   child: Container(
+                     color: Colors.white,
+                     margin: EdgeInsets.symmetric(horizontal: getWp(35),vertical: getHp(3)),
 
-                         Text( controller.fss[index].path),
-                       ],
-                     ),),
-                   ),onPressed: ()async{
+                     padding: EdgeInsets.all(getHp(27)),child: Row(
+
+                     children: [
+
+                       Text( "源${index} : ",style: TextStyle(fontSize: getSp(12)),),
+
+                       Text( controller.fss[index].title,style: TextStyle(fontSize: getSp(12)),),
+
+                       // Text( controller.fss[index].path),
+                     ],
+                   ),),onTap: ()async{
                    DialogUtil.showLoading();
                    await controller.getFictionDirs(index);
                    DialogUtil.dismissLoading();

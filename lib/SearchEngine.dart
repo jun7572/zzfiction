@@ -84,10 +84,10 @@ class SearchEngine{
 
         }
 
-      PrintUtil.prints("\n");
+      LogUtil.prints("\n");
     }
     for(FictionSource fss in lst){
-      PrintUtil.prints(fss.toString());
+      LogUtil.prints(fss.toString());
     }
         return lst;
   }
@@ -123,10 +123,10 @@ class SearchEngine{
 
       }
 
-      PrintUtil.prints("\n");
+      LogUtil.prints("\n");
     }
     for(FictionSource fss in lst){
-      PrintUtil.prints(fss.toString());
+      LogUtil.prints(fss.toString());
     }
     return lst;
 
@@ -138,7 +138,7 @@ class SearchEngine{
   //  通过a去获取 文章列表
   Future<FictionSource> openSourceToGetDirs(FictionSource fs)async{
     String url=fs.path;
-    PrintUtil.prints("打开的url="+url);
+    LogUtil.prints("打开的url="+url);
     //处理一下
     getHostAndSetRestful(fs);
     HttpClient client = HttpClient();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:zzfiction/SearchEngine.dart';
 import 'package:zzfiction/bean/FictionSource.dart';
 import 'package:zzfiction/controller/ReadController.dart';
 import 'package:zzfiction/managers/screen_manager.dart';
@@ -55,12 +56,10 @@ class DirDrawer extends GetView<ReadController> {
 
 
                               fontSize: getSp(12),
-
-                              color: fr.currentFictionSource
-                                  .readdingChapter ==
-                                  index
+                                //内容为空时显示灰色
+                              color: fr.currentFictionSource.readdingChapter ==index
                                   ? Colors.blue
-                                  : Colors.white),
+                                  : (ctr.currentDir[index].content==null||ctr.currentDir[index].content==SearchEngine.noData)?Colors.grey:Colors.white),
                         ),
                       ),
                     ),

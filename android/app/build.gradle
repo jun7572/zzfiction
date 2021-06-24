@@ -52,7 +52,7 @@ android {
         release {
             v1SigningEnabled true
             v2SigningEnabled true
-            storeFile file("/Users/jiajunzhou/Documents/我的证件信息/zjjkey")
+            storeFile file("/Users/jiajunzhou/Documents/我的证件信息/zjjjkey")
             storePassword "8897572"
             keyAlias "nujaijouhz123456"
             keyPassword "8897572"
@@ -63,7 +63,7 @@ android {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
 
         }
     }

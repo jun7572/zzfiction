@@ -11,6 +11,7 @@ import 'package:zzfiction/theme/ThemeUtil.dart';
 import 'package:zzfiction/utils/AppSettingUtil.dart';
 import 'package:zzfiction/utils/PreloadManager.dart';
 import 'package:zzfiction/utils/path_util.dart';
+import 'package:zzfiction/utils/push_manager.dart';
 
 import 'approute/AppRoutes.dart';
 import 'bean/FictionSource.dart';
@@ -46,27 +47,46 @@ void main() async {
   PreloadManager().init();
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
   @override
+  State<StatefulWidget> createState() {
+    // TODO: implement createState
+    return AppSttate();
+  }
+
+}
+class AppSttate extends State<MyApp> with WidgetsBindingObserver{
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // TODO: implement didChangeAppLifecycleState
+    if(state==AppLifecycleState.resumed){
+    PushManager.clearBadge();
+    }
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      PushManager.init(context);
+    });
+  }
+  @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeUtil.getlitghTheme(),
-      // home: MyHomePage(title: 'Flutter Demo Home Page'),
-      initialRoute: AppRoutes.INITIAL,
-      getPages: AppRoutes.routes,
+   return GetMaterialApp(
+     title: 'Flutter Demo',
+     theme: ThemeUtil.getlitghTheme(),
+     // home: MyHomePage(title: 'Flutter Demo Home Page'),
+     initialRoute: AppRoutes.INITIAL,
+     getPages: AppRoutes.routes,
 
-      builder: (BuildContext context, Widget child) {
-        initScreen(width: 375, height: 667);
-        return child;
-      },
-    );
+     builder: (BuildContext context, Widget child) {
+       initScreen(width: 375, height: 667);
+       return child;
+     },
 
-    // return MaterialApp(
-    //       title: 'Flutter Demo',
-    //       theme:ThemeUtil.getlitghTheme(),
-    //     home: MyHomePage());
+   );
   }
 }
 

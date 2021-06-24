@@ -53,8 +53,6 @@ class DirDrawer extends GetView<ReadController> {
                           ctr.currentDir[index].title,
                           maxLines: 1,
                           style: TextStyle(
-
-
                               fontSize: getSp(12),
                                 //内容为空时显示灰色
                               color: fr.currentFictionSource.readdingChapter ==index

@@ -46,6 +46,7 @@ dependencies:
   screen_brightness: 0.0.2
   solid_bottom_sheet: ^0.1.9
   pull_to_refresh: ^2.0.0
+  jpush_flutter: 2.1.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

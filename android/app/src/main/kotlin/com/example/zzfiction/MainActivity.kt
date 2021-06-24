@@ -1,4 +1,4 @@
-package com.june.zzfiction
+package com.june.fiction
 
 import android.annotation.SuppressLint
 import android.graphics.Color

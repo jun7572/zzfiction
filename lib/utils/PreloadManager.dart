@@ -29,7 +29,7 @@ class PreloadManager{
 
   static  _doWork(SendPort sendPort){
     //新管子?
-        LogUtil.prints("asdfasfafasf");
+
        // _counter++;
        // String msg = 'notification ' + _counter.toString();
        // print('SEND: ' + msg);

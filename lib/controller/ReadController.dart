@@ -53,7 +53,7 @@ class ReadController extends SuperController {
     brightnessFollowSystem = b;
     if (brightnessFollowSystem) {
 
-      await ScreenBrightness.setScreenBrightness(-1);
+      await ScreenBrightness.resetScreenBrightness();
     }
 
     update(["BrightnessBottomSheet"]);

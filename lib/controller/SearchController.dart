@@ -6,6 +6,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:zzfiction/SearchEngine.dart';
 import 'package:zzfiction/approute/PageName.dart';
 import 'package:zzfiction/bean/FictionSource.dart';
+import 'package:zzfiction/controller/TestController.dart';
 import 'package:zzfiction/repository/FictionRepository.dart';
 import 'package:zzfiction/utils/AppSettingUtil.dart';
 import 'package:zzfiction/utils/DialogUtil.dart';
@@ -61,7 +62,8 @@ class SearchController extends GetxController{
          padding: EdgeInsets.all(8),
          child: Text(s,style: TextStyle(color: Colors.white),),
        ),
-     ));
+     )
+     );
    }
    return lllss;
  }
@@ -70,6 +72,7 @@ class SearchController extends GetxController{
   void onReady() {
 
   init();
+  Get.lazyPut(() => TestController());
   }
   init()async{
     searchHistory =await AppSettingUtil.getSearchHistory()??[];

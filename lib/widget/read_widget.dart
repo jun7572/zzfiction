@@ -51,6 +51,7 @@ class ReadWidget2 extends StatelessWidget{
 
 
           body: Stack(
+            clipBehavior: Clip.none,
             children: [
               Container(
                 width: Get.width,
@@ -59,7 +60,6 @@ class ReadWidget2 extends StatelessWidget{
                 color: ctr.getBackgrandColor(),
               ),
               SafeArea(
-
                 bottom:false,
                 child:  NotificationListener(
                   onNotification:ctr.lastPageLoadMore,
@@ -78,7 +78,7 @@ class ReadWidget2 extends StatelessWidget{
                         itemBuilder: (_, index) {
 
                           return  Container(
-
+                            clipBehavior: Clip.none,
                             padding: EdgeInsets.symmetric(
                                 vertical: 0, horizontal: ctr.padding),
                             height: Get.height,
@@ -100,7 +100,6 @@ class ReadWidget2 extends StatelessWidget{
                                   ),
                                 ),
                                 Container(
-
                                   // decoration: BoxDecoration(border: Border.all(color: Colors.black,width: 1)),
                                   height: MeasureStringUtil.windowsHeight-20,
                                   //小说 content

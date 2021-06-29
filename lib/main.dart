@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:zzfiction/SearchEngine.dart';
 import 'package:zzfiction/test/Test2.dart';
@@ -21,6 +22,7 @@ import 'managers/screen_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
   if (Platform.isAndroid) {
     SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(statusBarColor: Colors.transparent,statusBarIconBrightness: Brightness.dark);
 
@@ -61,7 +63,7 @@ class AppSttate extends State<MyApp> with WidgetsBindingObserver{
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // TODO: implement didChangeAppLifecycleState
     if(state==AppLifecycleState.resumed){
-    PushManager.clearBadge();
+    // PushManager.clearBadge();
     }
   }
   @override
@@ -69,7 +71,7 @@ class AppSttate extends State<MyApp> with WidgetsBindingObserver{
     // TODO: implement initState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      PushManager.init(context);
+      // PushManager.init(context);
     });
   }
   @override

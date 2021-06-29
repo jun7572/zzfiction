@@ -9,6 +9,7 @@ class ReadBinding extends Bindings{
 
    Get.lazyPut(() => ReadController());
 
+
   }
 
 }

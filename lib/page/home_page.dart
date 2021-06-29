@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:zzfiction/approute/PageName.dart';
 import 'package:zzfiction/controller/FictionSourceController.dart';
 import 'package:zzfiction/db/DataBaseManager.dart';
@@ -85,7 +86,10 @@ class HomePage extends GetView<FictionSourceController> {
                 ],
               ),
             ),
-
+         SizedBox(height: 30,),
+         Container(
+             height: 50,
+             child: AdWidget(ad: controller.myBanner)),
           ],
         ),
         BookRepositoryPage(),

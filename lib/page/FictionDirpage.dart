@@ -4,7 +4,7 @@ import 'package:zzfiction/SearchEngine.dart';
 import 'package:zzfiction/approute/PageName.dart';
 import 'package:zzfiction/repository/FictionRepository.dart';
 
-//目录页面 //用于打开网络的?
+///目录页面 //用于打开网络的?
 class FictionDirpage extends StatelessWidget {
   FictionRepository fs = Get.find<FictionRepository>();
   @override
@@ -17,6 +17,7 @@ class FictionDirpage extends StatelessWidget {
           itemCount: fs.currentFictionSource.chapters.length,
           itemBuilder: (_, index) {
             return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextButton(
                   child: Padding(

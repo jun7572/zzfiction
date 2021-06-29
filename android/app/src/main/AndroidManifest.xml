@@ -10,10 +10,14 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <application
+            android:name=".MyApplication"
         android:usesCleartextTraffic="true"
-        android:name="io.flutter.app.FlutterApplication"
+
         android:label="菜狗搜索"
         android:icon="@mipmap/doglogo">
+        <meta-data
+                android:name="com.google.android.gms.ads.APPLICATION_ID"
+                android:value="ca-app-pub-7482911524392337~8782261310"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

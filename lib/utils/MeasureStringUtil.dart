@@ -15,7 +15,7 @@ class MeasureStringUtil{
   static double  get size=>_fontSize;
   static double   get height=>_fontHeight;
 
-  // 下面留多点空间防超出屏幕
+  /// 下面留多点空间防超出屏幕
   static final  int _bottomLinesNum=3;
 
 

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:zzfiction/controller/FictionSourceController.dart';
 import 'package:zzfiction/controller/SearchController.dart';
 import 'package:zzfiction/managers/screen_manager.dart';
+import 'package:zzfiction/utils/AppSettingUtil.dart';
 import 'package:zzfiction/widget/ReadWidget.dart';
 
 class SearchPage extends GetView<SearchController>{
@@ -13,7 +14,7 @@ class SearchPage extends GetView<SearchController>{
 
    return GetBuilder<SearchController>(
      initState: (state){
-       var argument = Get.arguments[0];
+       var argument = Get.arguments;
        if(argument!=null){
          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
            controller.textEditingController.text=argument;
@@ -51,7 +52,24 @@ class SearchPage extends GetView<SearchController>{
            ),
          ),
          body: SingleChildScrollView(
-           child: Wrap(children: controller.getHis(),spacing: 5,),
+           child:Column(
+             children: [
+               Row(children: [
+                    SizedBox(width: getWp(33),),
+                 Text("搜索历史",style: TextStyle(fontSize: getSp(15)),),  Spacer(),
+
+                 IconButton(onPressed: ()async{
+                      AppSettingUtil.setSearchHistory([]);
+                      await  controller.init();
+                      controller.update();
+
+
+                 }, icon: Icon(Icons.restore_from_trash_sharp,color: Colors.black,)),
+                 SizedBox(width: getWp(33),),
+               ],),
+               Wrap(children: controller.getHis(),spacing: 5,),
+             ],
+           ),
          ),
        );
      },

@@ -22,8 +22,8 @@ import 'package:path/path.dart' as path ;
 
 import 'package:zzfiction/bean/FictionSource.dart';
 import 'package:zzfiction/main.dart';
-import 'package:zzfiction/utils/DialogUtil.dart';
-import 'package:zzfiction/utils/PrintUtil.dart';
+import 'package:zzfiction/base/DialogUtil.dart';
+import 'package:zzfiction/base/PrintUtil.dart';
 
 import 'ContentKey.dart';
 
@@ -54,7 +54,7 @@ class SearchEngine{
   Future<List<FictionSource>>  search360(String content)async{
 
     var url = path360+content+" 小说";
-    var response = await http.get(url,headers: headers);
+    var response = await http.get(Uri.parse(url),headers: headers);
 
     dom.Document document = parse(response.body);
     //获取返回的结果,通过css 去判断
@@ -93,7 +93,7 @@ class SearchEngine{
   }
   Future<List<FictionSource>> search360Loadmore(String content,int pagenum)async{
     var url = path360+content+" 小说&pn=$pagenum";
-    var response = await http.get(url,headers: headers);
+    var response = await http.get(Uri.parse(url),headers: headers);
 
     dom.Document document = parse(response.body);
     //获取返回的结果,通过css 去判断
@@ -144,7 +144,7 @@ class SearchEngine{
     HttpClient client = HttpClient();
     client.badCertificateCallback = (X509Certificate cert, String host, int port){ return true; };
 
-    var response = await http.get(url,headers: headers);
+    var response = await http.get(Uri.parse(url),headers: headers);
 
     String charSet = getCharset(response);
     fs.charset=charSet;
@@ -254,7 +254,7 @@ class SearchEngine{
   Future<FictionSource> refreshLocalDir(FictionSource fs)async{
     String url=fs.path;
     HttpClient client = HttpClient();
-    var response = await http.get(url,headers: headers);
+    var response = await http.get(Uri.parse(url),headers: headers);
     dom.Document document;
     String charSet =fs.charset;
     if(charSet=="gbk"){
@@ -364,7 +364,7 @@ class SearchEngine{
   //     return "";
   //   }
   // }
-  //获取单章的内容
+  ///获取单章的内容,更新当前的FictionSource里的为index的章节
  Future<String>  getSingleChapterContent(FictionSource fs,int index)async{
     if(index>=fs.chapters.length){
       return noData;
@@ -379,12 +379,12 @@ class SearchEngine{
 
   if(fs.usePathIndex==0){
     try{
-      response = await http.get(url,headers: headers);
+      response = await http.get(Uri.parse(url),headers: headers);
       fs.usePathIndex=1;
     }catch(e){
       print(e.toString());
       try{
-        response = await http.get(fs.chapters[index].absPath2,headers: headers);
+        response = await http.get(Uri.parse(fs.chapters[index].absPath2),headers: headers);
         fs.usePathIndex=2;
       }catch(e){
         print(e.toString());
@@ -393,9 +393,9 @@ class SearchEngine{
 
     }
   }else if(fs.usePathIndex==1){
-    response = await http.get(url,headers: headers);
+    response = await http.get(Uri.parse(url),headers: headers);
   }else{
-    response = await http.get(fs.chapters[index].absPath2,headers: headers);
+    response = await http.get(Uri.parse(fs.chapters[index].absPath2),headers: headers);
   }
 
 

@@ -7,8 +7,9 @@ import 'package:get/get.dart';
 
 import 'package:zzfiction/controller/ReadController.dart';
 import 'package:zzfiction/gen_a/A.dart';
+import 'package:zzfiction/managers/screen_manager.dart';
 import 'package:zzfiction/utils/AppSettingUtil.dart';
-import 'package:zzfiction/utils/DialogUtil.dart';
+import 'package:zzfiction/base/DialogUtil.dart';
 import 'package:zzfiction/utils/MeasureStringUtil.dart';
 
 class SetReaddingOptionPage extends GetView<ReadController> {
@@ -97,8 +98,8 @@ Widget _settingButton(Function f,String s){
 
       style: ElevatedButton.styleFrom(shape:CircleBorder(),primary: Colors.black),
       child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Image.asset(s),
+        padding: const EdgeInsets.all(5.0),
+        child: Image.asset(s,width: getWp(44),height: getWp(44),),
       ),
     ),
   );

@@ -48,15 +48,18 @@ class BrightnessBottomSheet extends GetView<ReadController>{
                 SizedBox(height: 10,),
 
 
-                Row(
-                  children: [
-                    colorButton(c:Color(0xffEEEEEE),color: 0xffEEEEEE ),
-                    colorButton(c:Color(0xffDCEDDB), color: 0xffDCEDDB),
-                    colorButton(c:Color(0xffE1D3CA), color: 0xffE1D3CA),
-                    colorButton(c:Color(0xffF2EADF), color: 0xffF2EADF),
-                    colorButton(c:Color(0xffF8E5E9), color: 0xffF8E5E9),
-                    colorButton(c:Color(0xFFCCE8CF), color: 0xFFCCE8CF),
-                  ],
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      colorButton(c:Color(0xffEEEEEE),color: 0xffEEEEEE ),
+                      colorButton(c:Color(0xffDCEDDB), color: 0xffDCEDDB),
+                      colorButton(c:Color(0xffE1D3CA), color: 0xffE1D3CA),
+                      colorButton(c:Color(0xffF2EADF), color: 0xffF2EADF),
+                      colorButton(c:Color(0xffF8E5E9), color: 0xffF8E5E9),
+                      colorButton(c:Color(0xFFCCE8CF), color: 0xFFCCE8CF),
+                    ],
+                  ),
                 ),
                 SizedBox(height: 10,),
 

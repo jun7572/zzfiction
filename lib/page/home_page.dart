@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:zzfiction/approute/PageName.dart';
 import 'package:zzfiction/controller/FictionSourceController.dart';
 import 'package:zzfiction/db/DataBaseManager.dart';
 import 'package:zzfiction/gen_a/A.dart';
 import 'package:zzfiction/managers/screen_manager.dart';
+import 'package:zzfiction/page/zuishu_data_page.dart';
 import 'package:zzfiction/utils/PreloadManager.dart';
 import 'package:zzfiction/widget/ReadWidget.dart';
 
@@ -19,15 +20,20 @@ class HomePage extends GetView<FictionSourceController> {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
 
-      bottomNavigationBar: TabBar(
+      bottomNavigationBar: Container(
+        height: getHp(50),
+        child: TabBar(
 
-        controller: controller.tc,
-        tabs: controller.myTabs,
+          controller: controller.tc,
+          tabs: controller.myTabs,
 
+        ),
       ),
       body: TabBarView(controller: controller.tc, children: [
+        ZuishuDataPage(),
         Column(
           children: [
+
             Container(
 
               width: Get.width,
@@ -87,9 +93,7 @@ class HomePage extends GetView<FictionSourceController> {
               ),
             ),
          SizedBox(height: 30,),
-         Container(
-             height: 50,
-             child: AdWidget(ad: controller.myBanner)),
+
           ],
         ),
         BookRepositoryPage(),

@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:zzfiction/bean/FictionSource.dart';
-import 'package:zzfiction/utils/PrintUtil.dart';
+import 'package:zzfiction/base/PrintUtil.dart';
 
 
 
@@ -57,6 +57,7 @@ class DataBaseManager {
     //成功插入返回当前行的id
     Map<String, Object> map=fictionSource.toJson();
    var id = await _database.insert(table, map);
+    fictionSource.id=id;
     LogUtil.prints("插入书籍id为=="+id.toString());
     Batch batch = _database.batch();
     for(int i=0; i<fictionSource.chapters.length;i++){
@@ -107,7 +108,7 @@ class DataBaseManager {
   }
   ///插入一章的内容,当前的那章??
   updateOneChapterContent(FictionChapter fictionChapter){
-    LogUtil.prints("跟新一章的内容");
+    LogUtil.prints("跟新一章的内容到数据库");
         //todo
       // String strsql='UPDATE $tableChapter  SET content = ?, [${fictionChapter.content}])';
     // _database.rawUpdate( );

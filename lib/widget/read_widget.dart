@@ -40,7 +40,7 @@ class ReadWidget2 extends StatelessWidget{
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "添加本地书库",
+                  "收藏",
                   style: TextStyle(color: Colors.black,fontSize: 10),
                 ),
               ),

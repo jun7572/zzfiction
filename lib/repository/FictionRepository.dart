@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:zzfiction/approute/PageName.dart';
 import 'package:zzfiction/bean/FictionSource.dart';
 import 'package:zzfiction/db/DataBaseManager.dart';
-import 'package:zzfiction/utils/DialogUtil.dart';
+import 'package:zzfiction/base/DialogUtil.dart';
 
 import '../SearchEngine.dart';
 //这层出去的尽量都是实体,不要在controller进行数据库操作

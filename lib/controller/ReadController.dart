@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get/get.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:native_progress_hud/native_progress_hud.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -16,10 +17,10 @@ import 'package:zzfiction/db/DataBaseManager.dart';
 import 'package:zzfiction/page/ReaddingBottomSheet.dart';
 import 'package:zzfiction/repository/FictionRepository.dart';
 import 'package:zzfiction/utils/AppSettingUtil.dart';
-import 'package:zzfiction/utils/DialogUtil.dart';
+import 'package:zzfiction/base/DialogUtil.dart';
 import 'package:zzfiction/utils/MeasureStringUtil.dart';
 import 'package:zzfiction/utils/PreloadManager.dart';
-import 'package:zzfiction/utils/PrintUtil.dart';
+import 'package:zzfiction/base/PrintUtil.dart';
 
 class ReadController extends SuperController {
   GlobalKey<ScaffoldState> gk = GlobalKey<ScaffoldState>();
@@ -121,15 +122,15 @@ class ReadController extends SuperController {
     update();
   }
 
-  int fictionChapterDirIndex() {
-    FictionRepository fs = Get.find<FictionRepository>();
-    return fs.currentFictionSource.readdingChapter;
-  }
+  // int fictionChapterDirIndex() {
+  //   FictionRepository fs = Get.find<FictionRepository>();
+  //   return fs.currentFictionSource.readdingChapter;
+  // }
 
-  FictionChapter getCurrentChapter() {
-    FictionRepository fs = Get.find<FictionRepository>();
-    return fs.currentFictionChapter;
-  }
+  // FictionChapter getCurrentChapter() {
+  //   FictionRepository fs = Get.find<FictionRepository>();
+  //   return fs.currentFictionChapter;
+  // }
 
   //刷新当前小说的章节,看是否有更新
   refreshFiction() async {
@@ -183,6 +184,10 @@ class ReadController extends SuperController {
     try {
       await calculatePageNUms();
       await updateChapterPageNum(0);
+      //跳转最新
+      pc.jumpTo(fs.currentFictionSource.pageNum.toDouble());
+      //预加载
+      PreloadManager().load(fs.currentFictionSource.readdingChapter);
     } catch (e) {
       DialogUtil.showToast("无数据");
       Get.back();
@@ -307,7 +312,7 @@ class ReadController extends SuperController {
       updateChapterPageNum(0);
     });
   }
-  ///更新当前章节的页码
+  ///更新当前章节的页码,一般不会大于30吧
   updateChapterPageNum(int num)async{
     FictionRepository fss = Get.find<FictionRepository>();
     fss.currentFictionSource.pageNum = num;
@@ -369,4 +374,7 @@ class ReadController extends SuperController {
 
     SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
+
+
+
 }

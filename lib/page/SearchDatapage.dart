@@ -9,7 +9,7 @@ import 'package:zzfiction/approute/PageName.dart';
 import 'package:zzfiction/controller/SearchController.dart';
 import 'package:zzfiction/managers/screen_manager.dart';
 import 'package:zzfiction/repository/FictionRepository.dart';
-import 'package:zzfiction/utils/DialogUtil.dart';
+import 'package:zzfiction/base/DialogUtil.dart';
 
 import '../SearchEngine.dart';
   //搜索回来的所有数据源

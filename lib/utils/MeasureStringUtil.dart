@@ -16,7 +16,7 @@ class MeasureStringUtil{
   static double   get height=>_fontHeight;
 
   /// 下面留多点空间防超出屏幕
-  static final  int _bottomLinesNum=3;
+  static final  int _bottomLinesNum=2;
 
 
   static ParagraphStyle paragraphStyle=ParagraphStyle(

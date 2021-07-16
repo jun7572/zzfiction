@@ -1,9 +1,12 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 import 'package:zzfiction/controller/FictionSourceController.dart';
 import 'package:zzfiction/controller/SearchController.dart';
+import 'package:zzfiction/gen_a/A.dart';
 import 'package:zzfiction/managers/screen_manager.dart';
 import 'package:zzfiction/utils/AppSettingUtil.dart';
 import 'package:zzfiction/widget/ReadWidget.dart';
@@ -14,61 +17,93 @@ class SearchPage extends GetView<SearchController>{
 
    return GetBuilder<SearchController>(
      initState: (state){
+       //{"data":logic.listbook[index].title,"showAnimation":true}
        var argument = Get.arguments;
        if(argument!=null){
          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-           controller.textEditingController.text=argument;
+           controller.textEditingController.text=argument["data"];
            controller.update();
          });
        }
 
      },
      builder: (ctr){
-       return Scaffold(
-         appBar: AppBar(
 
-           backgroundColor: Colors.grey[200],
-           leading: BackButton(color: Colors.grey,),
-           title: Row(
-             children: [
-               Expanded(
-                 flex: 1,
-                 child: TextField(
-                   controller: controller.textEditingController,
-                   decoration: InputDecoration(
-                     hintText: "输入小说名",
-                     hintStyle: TextStyle(color: Colors.grey),
-                   ),
-                   // onChanged: controller.onSearchChange,
+       return  Scaffold(
+
+         body: SafeArea(
+           child: Padding(
+             padding:  EdgeInsets.symmetric(horizontal: getWp(38)),
+             child: Column(
+               children: [
+
+                 //搜索框
+               Container(
+                  padding: EdgeInsets.symmetric(horizontal: getWp(19)),
+                 height: getHp(getHp(33)),
+                 // margin: EdgeInsets.symmetric(horizontal: getWp(38),vertical: getHp(26)),
+                 margin: EdgeInsets.only(top: getHp(26)),
+                 decoration: BoxDecoration(border:Border.all(width: 1,color: Colors.black,),borderRadius: BorderRadius.circular(getWp(10))),
+                 child: Row(
+                   children: [
+                     Expanded(
+                       flex:1,
+                       child: TextField(
+
+
+                                   controller: controller.textEditingController,
+                                   decoration: InputDecoration(
+                                     contentPadding:EdgeInsets.zero,
+                                     // border:OutlineInputBorder(),
+                                     border:InputBorder.none,
+                                     isCollapsed:true,
+                                     hintText: "输入小说名",
+                                     hintStyle: TextStyle(color: Colors.grey,fontSize: getSp(12)),
+                                   ),
+                                   // onChanged: controller.onSearchChange,
+                                 ),
+                     ),
+
+
+                     AnimatedTextKit(
+                       onTap:  controller.searchContent,
+                       animatedTexts:[WavyAnimatedText("搜索",textStyle: TextStyle(color: Color(0xffFF831E)),)],
+                       stopPauseOnTap: true,
+                     )
+
+
+                   ],
                  ),
                ),
-               SizedBox(width: getWp(20),),
-               GestureDetector(onTap: controller.searchContent,child: Text("搜索",style: TextStyle(color: Colors.grey),))
-               // GestureDetector(onTap: (){
-               //   Navigator.push(context, MaterialPageRoute(builder: (_)=>ReadWidget()));
-               //
-               // },child: Text("搜索",style: TextStyle(color: Colors.grey),))
-             ],
-           ),
-         ),
-         body: SingleChildScrollView(
-           child:Column(
-             children: [
-               Row(children: [
-                    SizedBox(width: getWp(33),),
-                 Text("搜索历史",style: TextStyle(fontSize: getSp(15)),),  Spacer(),
 
-                 IconButton(onPressed: ()async{
-                      AppSettingUtil.setSearchHistory([]);
-                      await  controller.init();
-                      controller.update();
+                 //回收哪行
+                 SizedBox(height: getHp(14),),
+                 Row(children: [
+                           Text("搜索历史",style: TextStyle(fontSize: getSp(15)),),
+                           Spacer(),
 
 
-                 }, icon: Icon(Icons.restore_from_trash_sharp,color: Colors.black,)),
-                 SizedBox(width: getWp(33),),
-               ],),
-               Wrap(children: controller.getHis(),spacing: 5,),
-             ],
+                            GestureDetector(
+                              // style: TextButton.styleFrom(padding: EdgeInsets.only(right: 0)),
+                              child: Image.asset(A.assets_delete,width: getWp(22),),onTap: ()async{
+                              AppSettingUtil.setSearchHistory([]);
+                              await  controller.init();
+                              controller.update();
+                            },),
+
+                 ],),
+                  SizedBox(height: getHp(15),),
+                  Expanded(
+                    flex: 1,
+                    child: GridView(
+                      children: controller.getHis(),
+
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,childAspectRatio: 3),
+                    ),
+                  ),
+
+               ],
+             ),
            ),
          ),
        );

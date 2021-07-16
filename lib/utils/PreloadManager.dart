@@ -3,8 +3,9 @@ import 'dart:isolate';
 
 import 'package:get/get.dart';
 import 'package:zzfiction/SearchEngine.dart';
+import 'package:zzfiction/db/DataBaseManager.dart';
 import 'package:zzfiction/repository/FictionRepository.dart';
-import 'package:zzfiction/utils/PrintUtil.dart';
+import 'package:zzfiction/base/PrintUtil.dart';
 ///预加载管理者
 class PreloadManager{
 
@@ -40,7 +41,7 @@ class PreloadManager{
   static  final  String  MESSAGE_LOAD="MESSAGE_LOAD";
   // static  final  String  MESSAGE_LOAD="MESSAGE_LOAD";
   ///内部自定要不要加载
-  ///目前加载3章
+  ///目前加载3章,传入当前阅读章节的idnex,会自动加载后面的
   load(int chapterNum){
     _receivePort.sendPort.send(MESSAGE_LOAD+",$chapterNum");
   }
@@ -53,12 +54,14 @@ class PreloadManager{
     FictionRepository fictionRepository = Get.find<FictionRepository>();
     int start=int.parse(split[1]);
     int end=start+3;
+    //不能超过最后的章节
     if(end>fictionRepository.currentFictionSource.chapters.length){
       end=fictionRepository.currentFictionSource.chapters.length-1;
     }
     for(int i=start;i<end;i++){
      if(fictionRepository.currentFictionSource.chapters[i].content==null||fictionRepository.currentFictionSource.chapters[i].content==SearchEngine.noData){
        await SearchEngine().getSingleChapterContent(fictionRepository.currentFictionSource,i);
+       await DataBaseManager().updateOneChapterContent(fictionRepository.currentFictionSource.chapters[i]);
      }else{
        continue;
      }

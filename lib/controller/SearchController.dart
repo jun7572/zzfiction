@@ -9,7 +9,7 @@ import 'package:zzfiction/bean/FictionSource.dart';
 import 'package:zzfiction/controller/TestController.dart';
 import 'package:zzfiction/repository/FictionRepository.dart';
 import 'package:zzfiction/utils/AppSettingUtil.dart';
-import 'package:zzfiction/utils/DialogUtil.dart';
+import 'package:zzfiction/base/DialogUtil.dart';
 
 import 'FictionSourceController.dart';
 //这个放历史记录啊啥的
@@ -56,12 +56,7 @@ class SearchController extends GetxController{
          textEditingController.text=s;
 
        },
-       child: Container(
-         margin:EdgeInsets.all(8) ,
-         color: Colors.black54,
-         padding: EdgeInsets.all(8),
-         child: Text(s,style: TextStyle(color: Colors.white),),
-       ),
+       child: Text(s,style: TextStyle(color: Colors.black),maxLines: 1,overflow: TextOverflow.ellipsis,),
      )
      );
    }

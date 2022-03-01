@@ -47,7 +47,7 @@ void main() async {
   };
 
 
-  await ADManager.init();
+  // await ADManager.init();
 
 
   await DataBaseManager().init();

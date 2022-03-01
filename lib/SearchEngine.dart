@@ -194,7 +194,7 @@ class SearchEngine{
     });
     print("章节数=="+lists.length.toString());
     //没有章字的就使用a就行
-    if(lists.length<20){
+    if(lists.length<100){
       int length=0;
       List<dom.Element> contentElement=[];
 

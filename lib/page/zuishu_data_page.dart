@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:zzfiction/approute/AppRoutes.dart';
 import 'package:zzfiction/approute/PageName.dart';
 import 'package:zzfiction/base/my_cahenetwork_image.dart';
@@ -12,23 +12,23 @@ import 'package:zzfiction/utils/ADManager.dart';
 
 ///整儿八经的数据请求的页面我就遵循原则//追书的排行数据
 class ZuishuDataPage extends StatelessWidget {
-  BannerAd myBanner = BannerAd(
-  adUnitId: ADManager.myID,
-  // adUnitId: BannerAd.testAdUnitId,
-  size:AdSize.banner,
-  request: AdRequest(),
-  listener: BannerAdListener(),
-  );
+  // BannerAd myBanner = BannerAd(
+  // adUnitId: ADManager.myID,
+  // // adUnitId: BannerAd.testAdUnitId,
+  // size:AdSize.banner,
+  // request: AdRequest(),
+  // listener: BannerAdListener(),
+  // );
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ZuiShuController>(
       initState: (_){
 
-        myBanner.load();
+        // myBanner.load();
       },
       dispose: (_){
-        myBanner.dispose();
+        // myBanner.dispose();
       },
 
      id: 'ZuishuDataPage',
@@ -76,17 +76,17 @@ class ZuishuDataPage extends StatelessWidget {
                   ),
                 );
               }),
-             Positioned(
-               bottom: 1,
-
-                 child:Container(
-                   height:50,
-                   width: Get.width,
-                   child: Center(child: Container(
-                       height:50,
-                       width: 330,
-                       child: AdWidget(ad: myBanner))),
-                 ),),
+             // Positioned(
+             //   bottom: 1,
+             //
+             //     child:Container(
+             //       height:50,
+             //       width: Get.width,
+             //       child: Center(child: Container(
+             //           height:50,
+             //           width: 330,
+             //           child: AdWidget(ad: myBanner))),
+             //     ),),
 
             ],
           ),

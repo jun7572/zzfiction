@@ -1,3 +1,4 @@
+
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -36,6 +37,7 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
+
     lintOptions {
         disable 'InvalidPackage'
     }
@@ -43,7 +45,7 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.june.fiction"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode versioncode_load.toInteger()
         versionName versionName_load
@@ -71,12 +73,26 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+
             signingConfig signingConfigs.release
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 
         }
+        debug {
+            signingConfig signingConfigs.release
+        }
+
     }
+
+    repositories {
+        maven { url 'https://jitpack.io' }
+        flatDir {
+            dirs 'libs'
+        }
+    }
+
 }
 
 flutter {
@@ -85,4 +101,12 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation(name: 'csj_ad_sdk_0622', ext: 'aar')
+    implementation (name: 'gdt_ad_sdk_0621', ext:'aar')
+    implementation (name: 'ks_ad_sdk_0608', ext:'aar')
+    implementation (name:'miit_mdid_1.0.10', ext:'aar')
+    implementation(name: 'pocket_ad_sdk_1.8.0', ext:'aar')
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation "androidx.multidex:multidex:2.0.1"
 }

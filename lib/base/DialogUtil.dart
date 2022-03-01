@@ -1,6 +1,5 @@
 import 'package:alert/alert.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import 'package:native_progress_hud/native_progress_hud.dart';
 import 'package:zzfiction/theme/ThemeUtil.dart';
@@ -37,14 +36,7 @@ class DialogUtil{
         return AlertDialog(
           title: const Text('Pick a color!'),
           content: SingleChildScrollView(
-            child: ColorPicker(
-              pickerColor: pickerColor,
-              onColorChanged: (c){
-
-              },
-              showLabel: true,
-              pickerAreaHeightPercent: 0.8,
-            ),
+            child: Container(),
             // Use Material color picker:
             //
             // child: MaterialPicker(

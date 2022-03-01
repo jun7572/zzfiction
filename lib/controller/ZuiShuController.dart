@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:zzfiction/base/request.dart';
 import 'package:zzfiction/bean/recommend_entity.dart';
 import 'package:zzfiction/http/httpcontroller.dart';
@@ -9,7 +9,7 @@ import 'package:zzfiction/utils/ADManager.dart';
 
 class ZuiShuController extends SuperController{
   List<RecommendRankingBooks> listbook=[];
-  AdSize siaze;
+  // AdSize siaze;
 
 
   @override
@@ -38,7 +38,7 @@ class ZuiShuController extends SuperController{
 
 
 
-    siaze=await AdSize.getAnchoredAdaptiveBannerAdSize(Orientation.portrait, Get.width.toInt());
+    // siaze=await AdSize.getAnchoredAdaptiveBannerAdSize(Orientation.portrait, Get.width.toInt());
 
   }
 
@@ -69,4 +69,5 @@ class ZuiShuController extends SuperController{
      });
    }
   }
+
 }
